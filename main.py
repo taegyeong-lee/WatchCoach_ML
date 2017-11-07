@@ -17,7 +17,7 @@ import transfer_view as tv
 
 
 # 모델 설정
-MODEL_NAME = 'ssd_mobilenet_v1_coco_11_06_2017'
+MODEL_NAME = 'basic_model'
 MODEL_FILE = MODEL_NAME + '.tar.gz'
 DOWNLOAD_BASE = 'http://download.tensorflow.org/models/object_detection/'
 PATH_TO_CKPT = MODEL_NAME + '/frozen_inference_graph.pb'
@@ -31,7 +31,6 @@ label_map = label_map_util.load_labelmap(PATH_TO_LABELS)
 categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes=NUM_CLASSES,
                                                             use_display_name=True)
 category_index = label_map_util.create_category_index(categories)
-
 
 
 # 객체인식해서 사람의 좌표 반환
@@ -110,7 +109,7 @@ def mainProcessing():
 
     # 버드아이뷰 변환 행렬 구하기
     tl = (480, 494)
-    bl = (878,1036 )
+    bl = (878, 1036)
     tr = (792, 469)
     br = (1328, 743)
     trans_matrix = tv.get_trans_matrix(tl, bl, tr, br)
@@ -121,7 +120,7 @@ def mainProcessing():
     h = my_clip.h
     video = cv2.VideoWriter('/Users/itaegyeong/Desktop/tensorflowvideo3.mp4', -1, 30, (w, h))
 
-    a=0
+    a = 0
     for frame in my_clip.iter_frames():
         a += 1
         if a%10 != 0:
