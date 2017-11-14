@@ -27,6 +27,7 @@ category_index = label_map_util.create_category_index(categories)
 # @brief : 물체인식 + 팀구별 후 각 선수들의 위치를 반환하는 함수
 # @param : 이미지, 이미지 가로, 이미지 세로, 텐서세션, 텐서그래프
 # @return : 물체인식된 이미지, (원래이미지의) 아군선수 좌표, 적군선수 좌표, 기타물체 좌표
+
 def detect_objects(image_np, w, h, sess, detection_graph):
 
     image_np_expanded = np.expand_dims(image_np, axis=0)
@@ -75,7 +76,7 @@ def detect_objects(image_np, w, h, sess, detection_graph):
                 # 분리된 이미지로 팀 구별하기
                 # boxX2Point-boxX1Point, int(boxY2Point*.8)+2-boxY1Point
 
-                team_code = ti.team_division(cut_image, 3)
+                team_code = ti.team_division(cut_image, 3, 500)
 
                 # 0은 아군
                 if team_code == 0:
