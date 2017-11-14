@@ -75,16 +75,16 @@ def detect_objects(image_np, w, h, sess, detection_graph):
                 # 분리된 이미지로 팀 구별하기
                 # boxX2Point-boxX1Point, int(boxY2Point*.8)+2-boxY1Point
 
-                team_code = ti.team_division(cut_image, 3, 500)
+                team_code = ti.team_division(cut_image, 3)
 
-                # 0은 아군
-                if team_code == 0:
+                # 1 은 아군
+                if team_code == 1:
                     ourTeamPoint.append(point)
-                # 1은 적군
-                elif team_code == 1:
-                    enemyTeamPoint.append(point)
-                # -1은 심판
+                # -1 은 적군
                 elif team_code == -1:
+                    enemyTeamPoint.append(point)
+                # 0 은 심판
+                elif team_code == 0:
                     otherPoint.append(point)
 
     # 물체인식 완료된 이미지와 아군/적군 위치 반환
