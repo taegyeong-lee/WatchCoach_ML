@@ -25,7 +25,7 @@ def distance(rgb, standard_rgb):
     g_dist = math.sqrt((rgb[1] - standard_rgb[1]) * (rgb[1] - standard_rgb[1]))
     b_dist = math.sqrt((rgb[2] - standard_rgb[2]) * (rgb[2] - standard_rgb[2]))
 
-    if ((r_dist < 40) and (g_dist < 40) and( b_dist < 40)):
+    if (r_dist < 50) and (g_dist < 50) and(b_dist < 50):
         return True
 
     return False
