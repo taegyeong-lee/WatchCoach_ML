@@ -1,58 +1,50 @@
-
-# @brief : rgb를 비교하여
-# @param : 이미지, 이미지 가로, 이미지 세로
-# @return : 팀코드 / -1 (기타), 0 (아군), 1 (적군)
-def compareRGB(b, g, r, compareRGB):
-    count=0
-    if b>compareRGB[0][0] and b<compareRGB[1][0]:
-        count=count+1
-    elif r>compareRGB[0][2] and r<compareRGB[1][2]:
-        count = count + 1
-    elif g>compareRGB[0][1] and g<compareRGB[1][1]:
-        count = count + 1
-
-    if count == 3:
-        return True
-
-    return False
+import numpy as np
+import cv2
+from sklearn.cluster import KMeans
+from sklearn.metrics.pairwise import euclidean_distances
 
 
-# @brief : 하나의 이미지(사람)에 대해 팀을 구별해주는 함수
-# @param : 이미지, 이미지 가로, 이미지 세로
-# @return : 팀코드 / -1 (기타), 0 (아군), 1 (적군)
-def team_identification(image, maxX, maxY):
+# @brief : 가장 많이 사용된 색을 찾는 함수
+# @param : 이미지 또는 이미지주소와 많이 사용된 색 종류 K
+# @return : 가장 많이 사용된 색들
 
-    stadiumBGR=[(100,100,100),(150,150,150)]
-    ourTeamBGR=[(10,10,10),(50,50,50)]
-    enemyTeamBGR=[(80,80,80),(99,99,99)]
+def image_color_cluster(image_path, k):
+    image = cv2.imread(image_path)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    image = image.reshape((image.shape[0] * image.shape[1], 3))
+    clt = KMeans(n_clusters=k)
+    clt.fit(image)
 
-    ourCount = 0
-    enemyCount = 0
-    otherCount = 0
+    return np.int_(clt.cluster_centers_)
 
-    stadiumCount = 0
 
-    for x in range(0, int(maxX)):
-        for y in range(0, int(maxY)):
+# @brief : 팀을 구별해주는 함수
+# @param : RGB 색, k(색 종류)
+# @return : 1 (아군) ,-1 (적군), 0 (기타)
 
-            b = image.item(y, x, 0)
-            g = image.item(y, x, 1)
-            r = image.item(y, x, 2)
+def team_code(rgb, k):
 
-            if compareRGB(b, g, r, stadiumBGR):
-                stadiumCount = stadiumCount+1
-            else :
-                if compareRGB(b, g, r, ourTeamBGR):
-                     ourCount = ourCount+1
-                elif compareRGB(b, g, r, enemyTeamBGR):
-                    enemyCount = enemyCount+1
-                else:
-                    otherCount = otherCount+1
 
-    if ourCount >= enemyCount:
-        return 0
-    elif ourCount < enemyCount:
-        return 1
-    elif otherCount > ourCount and otherCount > enemyCount:
-        return -1
+    for i in range(0, k):
+        if(euclidean_distances(rgb[k], stadium_rgb) < .9):
+            return 0;
+        if(euclidean_distances(rgb[k], our_team_rgb) < .9):
+            return 1;
+        if(euclidean_distances(rgb[k], enemy_team_rgb) < .9):
+            return -1;
+
+
+def team_division(image_path, k):
+    best_rgb = image_color_cluster(image_path, k)
+    code = team_code(best_rgb, k)
+    return code
+
+
+
+image_path = "/Users/itaegyeong/Desktop/test2.png"
+
+
+
+
+
 

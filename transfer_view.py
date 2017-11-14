@@ -4,6 +4,7 @@ import numpy as np
 # @brief : 변환 행렬 구하는 함수
 # @param : 원래 이미지의 각 꼭짓점 좌표
 # @return : 변환행렬, 변환된 이미지의 가로, 세로
+
 def get_trans_matrix(tl, bl, tr, br):
 
     # 오리지널 이미지
@@ -34,6 +35,7 @@ def get_trans_matrix(tl, bl, tr, br):
 # @brief : 각 선수들의 좌표를 (탑뷰로) 변환 하는 함수
 # @param : 원래이미지, 우리팀좌표, 적팀좌표, 기타물체좌표, 변환행렬, 변환된 이미지 가로, 변환된 이미지 세로
 # @return : 변환된 이미지, 변환된 우리팀 좌표, 변환된 적팀 좌표, 변환된 기타물체 좌표
+
 def trans_object_point(original_image, our_team_point, enemy_team_point, other_point, trans_matrix, trans_image_weight, trans_image_height):
 
     trans_our_team_point = None
@@ -61,9 +63,11 @@ def trans_object_point(original_image, our_team_point, enemy_team_point, other_p
     # 점 찍힌 이미지와 변환된 사람 좌표를 리턴함
     return dst, trans_our_team_point, trans_enemy_team_point, trans_other_point
 
+
 # @brief : 테스트(시각화)용 점 찍어주는 함수
 # @param : 이미지, 좌표, 색
 # @return : 없음
+
 def draw_circle(image, point, rgb):
     for i in point:
         for i2 in i:
