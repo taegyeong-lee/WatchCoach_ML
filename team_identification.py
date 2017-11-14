@@ -1,13 +1,11 @@
 import numpy as np
 import cv2
+import math
 from sklearn.cluster import KMeans
-from sklearn.metrics.pairwise import euclidean_distances
-
 
 # @brief : 가장 많이 사용된 색을 찾는 함수
 # @param : 이미지 또는 이미지주소와 많이 사용된 색 종류 K
 # @return : 가장 많이 사용된 색들
-
 def image_color_cluster(image_path, k):
     image = cv2.imread(image_path)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -18,41 +16,55 @@ def image_color_cluster(image_path, k):
     return np.int_(clt.cluster_centers_)
 
 
+# @brief : 색을 비교해서 비슷한 계열인지 아닌지 판단하는 함수
+# @param : 색(RGB), 비교할 색(RGB)
+# @return : True (비슷한 색이면), False (비슷한 색이 아니면)
+def distance(rgb, standard_rgb):
+
+    r_dist =  math.sqrt((rgb[0] - standard_rgb[0]) * (rgb[0] - standard_rgb[0]))
+    g_dist = math.sqrt((rgb[1] - standard_rgb[1]) * (rgb[1] - standard_rgb[1]))
+    b_dist = math.sqrt((rgb[2] - standard_rgb[2]) * (rgb[2] - standard_rgb[2]))
+
+    if ((r_dist < 40) and (g_dist < 40) and( b_dist < 40)):
+        return True
+
+    return False
+
+
 # @brief : 팀을 코드를 반환 해주는 함수
 # @param : RGB 색, k(색 종류)
 # @return : 1 (아군) ,-1 (적군), 0 (기타)
+def team_code(rgb, k):
 
-def team_code(rgb, k, standard):
-    stadium_rgb = [1, 1, 1]
-    our_team_rgb = [1, 1, 1]
-    enemy_team_rgb = [1, 1, 1]
+    stadium_rgb = [0, 0, 255] # blue
+    our_team_rgb = [0, 0, 0] # black
+    enemy_team_rgb = [255, 0, 0] # red
 
+    # 가장 많이 사용된 색 k 개를 뽑아서, 하나라도 레드, 블루에 속하면 팀 구별해 리턴
     for i in range(0, k):
-        if(euclidean_distances([rgb[i]], [stadium_rgb]) > standard):
-            return 0;
-        if(euclidean_distances([rgb[i]], [our_team_rgb]) > standard):
-            return 1;
-        if(euclidean_distances([rgb[i]], [enemy_team_rgb]) > standard):
-            return -1;
+        if(distance(rgb[i], stadium_rgb)):
+            print(rgb[i], "stadium")
+
+        if(distance(rgb[i], our_team_rgb)):
+            print(rgb[i], "our team")
+            return 1
+
+        if (distance(rgb[i], enemy_team_rgb)):
+            print(rgb[i], "enemy team")
+            return -1
+
+    return 0
 
 
 # @brief : 팀을 구별해주는 함수 (메인)
 # @param : RGB 색, k(색 종류)
 # @return : 1 (아군) ,-1 (적군), 0 (기타)
-
-def team_division(image_path, k, standard):
+def team_division(image_path, k):
     best_rgb = image_color_cluster(image_path, k)
-    code = team_code(best_rgb, k, standard)
+    code = team_code(best_rgb, k)
     return code
 
 
 image_path = "/Users/itaegyeong/Desktop/test2.png"
-print(team_division(image_path, 3, 500))
-
-
-
-
-
-
-
+print(team_division(image_path, 3))
 
