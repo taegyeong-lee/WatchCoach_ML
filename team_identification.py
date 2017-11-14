@@ -6,9 +6,9 @@ from sklearn.cluster import KMeans
 # @brief : 가장 많이 사용된 색을 찾는 함수
 # @param : 이미지 또는 이미지주소와 많이 사용된 색 종류 K
 # @return : 가장 많이 사용된 색들
-def image_color_cluster(image_path, k):
-    image = cv2.imread(image_path)
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+def image_color_cluster(image_src, k):
+    # image = cv2.imread(image_path)
+    image = cv2.cvtColor(image_src, cv2.COLOR_BGR2RGB)
     image = image.reshape((image.shape[0] * image.shape[1], 3))
     clt = KMeans(n_clusters=k)
     clt.fit(image)
@@ -59,12 +59,12 @@ def team_code(rgb, k):
 # @brief : 팀을 구별해주는 함수 (메인)
 # @param : RGB 색, k(색 종류)
 # @return : 1 (아군) ,-1 (적군), 0 (기타)
-def team_division(image_path, k):
-    best_rgb = image_color_cluster(image_path, k)
+def team_division(image, k):
+    best_rgb = image_color_cluster(image, k)
     code = team_code(best_rgb, k)
+    # print(code)
     return code
 
 
 image_path = "/Users/itaegyeong/Desktop/test2.png"
-print(team_division(image_path, 3))
 

@@ -70,12 +70,14 @@ def detect_objects(image_np, w, h, sess, detection_graph):
 
                 # 이미지 상반신만 분리
                 cut_image = image_np[boxY1Point:int(boxY2Point*.8)+2, boxX1Point:boxX2Point]
-                cv2.imwrite(finalScore, cut_image)
 
                 # 분리된 이미지로 팀 구별하기
                 # boxX2Point-boxX1Point, int(boxY2Point*.8)+2-boxY1Point
 
                 team_code = ti.team_division(cut_image, 3)
+
+                cv2.imshow('eeee', cut_image)
+
 
                 # 1 은 아군
                 if team_code == 1:
@@ -109,10 +111,10 @@ def main_processing():
     bl = (878, 1036)
     tr = (792, 469)
     br = (1328, 743)
-    trans_matrix = tv.get_trans_matrix(tl, bl, tr, br)
+    trans_matrix, trans_image_w, trans_image_h = tv.get_trans_matrix(tl, bl, tr, br)
 
     # 비디오 가져오기
-    my_clip = VideoFileClip("/Users/itaegyeong/Desktop/무제 폴더/GOPR0008.MP4")
+    my_clip = VideoFileClip("/Users/itaegyeong/Desktop/인터뷰.mov")
     w = my_clip.w
     h = my_clip.h
 
@@ -123,7 +125,8 @@ def main_processing():
             continue
 
         image, our_team_point, enemy_team_point, other_point = detect_objects(frame, w, h, sess, detection_graph)
-        trans_image, our_trans_team_point, enemy_trans_team_point, trans_other_point = tv.trans_object_point(image, our_team_point, enemy_team_point, other_point, trans_matrix)
+        trans_image, our_trans_team_point, enemy_trans_team_point, trans_other_point = \
+            tv.trans_object_point(image, our_team_point, enemy_team_point, other_point, trans_matrix, trans_image_w, trans_image_h)
 
         image = cv2.resize(image, (480, 270), interpolation=cv2.INTER_CUBIC)
         cv2.imshow('asd', image)
