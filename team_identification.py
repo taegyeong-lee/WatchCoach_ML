@@ -7,8 +7,8 @@ from sklearn.cluster import KMeans
 # @param : 이미지 또는 이미지주소와 많이 사용된 색 종류 K
 # @return : 가장 많이 사용된 색들
 def image_color_cluster(image_src, k):
-    # image = cv2.imread(image_path)
-    image = cv2.cvtColor(image_src, cv2.COLOR_BGR2RGB)
+    image2 = cv2.imread(image_src)
+    image = cv2.cvtColor(image2, cv2.COLOR_BGR2RGB)
     image = image.reshape((image.shape[0] * image.shape[1], 3))
     clt = KMeans(n_clusters=k)
     clt.fit(image)
@@ -45,6 +45,7 @@ def team_code(rgb, k):
         if(distance(rgb[i], stadium_rgb)):
             print(rgb[i], "stadium")
 
+
         if(distance(rgb[i], our_team_rgb)):
             print(rgb[i], "our team")
             return 1
@@ -52,6 +53,8 @@ def team_code(rgb, k):
         if (distance(rgb[i], enemy_team_rgb)):
             print(rgb[i], "enemy team")
             return -1
+
+    print("None")
 
     return 0
 
@@ -61,10 +64,12 @@ def team_code(rgb, k):
 # @return : 1 (아군) ,-1 (적군), 0 (기타)
 def team_division(image, k):
     best_rgb = image_color_cluster(image, k)
+    print(best_rgb)
     code = team_code(best_rgb, k)
     # print(code)
     return code
 
 
-image_path = "/Users/itaegyeong/Desktop/test2.png"
+image_path = "/Users/itaegyeong/Desktop/testblue.png"
+team_division(image_path,3)
 
