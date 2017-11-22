@@ -74,10 +74,7 @@ def detect_objects(image_np, w, h, sess, detection_graph):
                 # 분리된 이미지로 팀 구별하기
                 # boxX2Point-boxX1Point, int(boxY2Point*.8)+2-boxY1Point
 
-                team_code = ti.team_division(cut_image, 3)
-
-                cv2.imshow('eeee', cut_image)
-
+                team_code = ti.team_division(cut_image)
 
                 # 1 은 아군
                 if team_code == 1:
