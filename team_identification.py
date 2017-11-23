@@ -7,19 +7,20 @@ import time
 # @return : 1 (아군) ,-1 (적군), 0 (기타)
 def team_division(image):
 
-    #img = image # or image
-    img = cv2.imread(image)
+    img = image # or image
+    # img = cv2.imread(image)
     img_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
     # HSV color
     boundaries = [
-        ([-1],[0,100 ,100],[10, 255, 255]), # 적군 red
-        ([1],[170, 51, 0],[179, 255, 255]) # 아군 blue
+        ([-1], [0, 70, 50], [10, 255, 255]), # 적군 red
+        ([1],[110, 50, 50],[130, 255, 255]) # 아군 blue
     ]
 
     list = []
 
     for (code, lower, upper) in boundaries:
+        print(code,lower,upper)
         lower = np.array(lower, dtype='uint8')
         upper = np.array(upper, dtype='uint8')
 
@@ -33,18 +34,12 @@ def team_division(image):
 
         list.append([code[0], count])
 
-    print(list)
 
-    return 0
-
-list =["/Users/itaegyeong/Desktop/blue2.png", "/Users/itaegyeong/Desktop/red.png", "/Users/itaegyeong/Desktop/blue2.png"]
-
-for i in list:
-    team_division(i)
+    if list[0][1] > list[1][1] and list[0][1] > 1000:
+        return -1
+    elif list[0][1] < list[1][1] and list[1][1] > 1000:
+        return 1
 
 
 
-
-
-    # 조만석
 
