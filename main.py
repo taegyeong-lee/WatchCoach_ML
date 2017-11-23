@@ -49,7 +49,7 @@ def detect_objects(image_np, w, h, sess, detection_graph):
         np.squeeze(classes).astype(np.int32),
         np.squeeze(scores),
         category_index,
-        min_score_thresh=.8,
+        min_score_thresh=.1,
         use_normalized_coordinates=True,
         line_thickness=8)
 
@@ -59,7 +59,7 @@ def detect_objects(image_np, w, h, sess, detection_graph):
 
     for detectionObject, detectionScore, detectionBox in zip(classes, scores, boxes):
         for finalObject, finalScore, finalBoxPoint in zip(detectionObject, detectionScore, detectionBox):
-            if finalObject == 1 and finalScore > 0.8:
+            if finalObject == 1 and finalScore > 0.1:
 
                 # top left, bottom right
                 br_point = [int(finalBoxPoint[1] * w), int(finalBoxPoint[0] * h)]
@@ -69,7 +69,7 @@ def detect_objects(image_np, w, h, sess, detection_graph):
                 point = (tl_point[0] + (br_point[0] - tl_point[0])/2, tl_point[1])
 
                 # 비정상적인 크기 예외처리
-                if tl_point[0]-br_point[0] > 1000:
+                if tl_point[0]-br_point[0] > 300:
                     continue
 
                 # 이미지 몸통만 분리
@@ -77,12 +77,7 @@ def detect_objects(image_np, w, h, sess, detection_graph):
                 cut_point_y2 = int(tl_point[1] + (br_point[1] - tl_point[1])/2) # 다리부터 몸통까지
                 cut_image = image_np[cut_point_y1:cut_point_y2, br_point[0]:tl_point[0]]
 
-                # cv2.imshow('asd', cut_image)
-                # cv2.waitKey(1)
-
                 team_code = ti.team_division(cut_image)
-                print(team_code)
-
 
                 # 1 은 아군
                 if team_code == 1:
@@ -96,7 +91,7 @@ def detect_objects(image_np, w, h, sess, detection_graph):
 
                 end = time.time() - start
 
-                print("전체 걸린시간 : ", end)
+
 
     # 물체인식 완료된 이미지와 아군/적군 위치 반환
     return image_np, ourTeamPoint, enemyTeamPoint, otherPoint
@@ -116,10 +111,10 @@ def main_processing():
         sess = tf.Session(graph=detection_graph)
 
     # 버드아이뷰 변환 행렬 구하기
-    tl = (389, 177)
-    bl = (26, 575)
-    tr = (1165, 317)
-    br = (1209, 644)
+    tl = (145* 2, 298 * 2)
+    bl = (363 * 2, 538 * 2)
+    tr = (518 * 2, 253 * 2)
+    br = (892 * 2, 445 * 2)
     trans_matrix, trans_image_w, trans_image_h = tv.get_trans_matrix(tl, bl, tr, br)
 
     cap = cv2.VideoCapture('/Users/itaegyeong/Desktop/test.mp4')
@@ -132,9 +127,18 @@ def main_processing():
             h = cap.get(4)
 
             image, our_team_point, enemy_team_point, other_point = detect_objects(frame, w, h, sess, detection_graph)
+
+            print(our_team_point, "///// ", enemy_team_point)
+
+
             trans_image, our_trans_team_point, enemy_trans_team_point, trans_other_point = \
                 tv.trans_object_point(image, our_team_point, enemy_team_point, other_point, trans_matrix, trans_image_w,
                                       trans_image_h)
+
+
+            shrink = cv2.resize(trans_image, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+            cv2.imshow('test', shrink)
+            cv2.waitKey(1)
 
             if cv2.waitKey(30) & 0xFF == ord('q'):
                 break
