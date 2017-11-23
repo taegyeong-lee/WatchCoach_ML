@@ -49,7 +49,7 @@ def detect_objects(image_np, w, h, sess, detection_graph):
         np.squeeze(classes).astype(np.int32),
         np.squeeze(scores),
         category_index,
-        min_score_thresh=.1,
+        min_score_thresh=.4,
         use_normalized_coordinates=True,
         line_thickness=8)
 
@@ -59,7 +59,7 @@ def detect_objects(image_np, w, h, sess, detection_graph):
 
     for detectionObject, detectionScore, detectionBox in zip(classes, scores, boxes):
         for finalObject, finalScore, finalBoxPoint in zip(detectionObject, detectionScore, detectionBox):
-            if finalObject == 1 and finalScore > 0.1:
+            if finalObject == 1 and finalScore > 0.4:
 
                 # top left, bottom right
                 br_point = [int(finalBoxPoint[1] * w), int(finalBoxPoint[0] * h)]
@@ -127,8 +127,6 @@ def main_processing():
             h = cap.get(4)
 
             image, our_team_point, enemy_team_point, other_point = detect_objects(frame, w, h, sess, detection_graph)
-
-            print(our_team_point, "///// ", enemy_team_point)
 
 
             trans_image, our_trans_team_point, enemy_trans_team_point, trans_other_point = \

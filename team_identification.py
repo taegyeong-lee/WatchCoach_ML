@@ -20,7 +20,6 @@ def team_division(image):
     list = []
 
     for (code, lower, upper) in boundaries:
-        print(code,lower,upper)
         lower = np.array(lower, dtype='uint8')
         upper = np.array(upper, dtype='uint8')
 
@@ -34,12 +33,16 @@ def team_division(image):
 
         list.append([code[0], count])
 
+        print(list)
 
-    if list[0][1] > list[1][1] and list[0][1] > 1000:
+
+
+    if list[0][1] > list[1][1] and list[0][1] > 100:
         return -1
-    elif list[0][1] < list[1][1] and list[1][1] > 1000:
+    elif list[0][1] < list[1][1] and list[1][1] > 100:
         return 1
-
+    else:
+        return 0
 
 
 
