@@ -7,9 +7,6 @@ from object_detection.utils import visualization_utils as vis_util
 import time
 
 
-import matplotlib.pyplot as plt
-
-
 # local modules
 import team_identification as ti
 import transfer_view as tv
@@ -64,29 +61,28 @@ def detect_objects(image_np, w, h, sess, detection_graph):
         for finalObject, finalScore, finalBoxPoint in zip(detectionObject, detectionScore, detectionBox):
             if finalObject == 1 and finalScore > 0.8:
 
-                personXPoint = int(finalBoxPoint[3] * w)
-                personYPoint = int(finalBoxPoint[2] * h)
-                point = (personXPoint, personYPoint)
-
-
-                # bottom left, top right
+                # top left, bottom right
                 br_point = [int(finalBoxPoint[1] * w), int(finalBoxPoint[0] * h)]
                 tl_point = [int(finalBoxPoint[3] * w), int(finalBoxPoint[2] * h)]
-                print(br_point, tl_point)
 
+                # 사람 위치
+                point = (tl_point[0] + (br_point[0] - tl_point[0])/2, tl_point[1])
+
+                # 비정상적인 크기 예외처리
                 if tl_point[0]-br_point[0] > 1000:
                     continue
 
-                # 이미지 상반신만 분리
-                cut_image = image_np[br_point[1]:tl_point[1], br_point[0]:tl_point[0]]
+                # 이미지 몸통만 분리
+                cut_point_y1 = int(br_point[1] + (tl_point[1]-br_point[1])/4.5) # 머리부터 목까지
+                cut_point_y2 = int(tl_point[1] + (br_point[1] - tl_point[1])/2) # 다리부터 몸통까지
+                cut_image = image_np[cut_point_y1:cut_point_y2, br_point[0]:tl_point[0]]
 
-                cv2.imshow('asd', cut_image)
-                cv2.waitKey(1)
+                # cv2.imshow('asd', cut_image)
+                # cv2.waitKey(1)
 
                 team_code = ti.team_division(cut_image)
+                print(team_code)
 
-                # 분리된 이미지로 팀 구별하기
-                # boxX2Point-boxX1Point, int(boxY2Point*.8)+2-boxY1Point
 
                 # 1 은 아군
                 if team_code == 1:
@@ -97,7 +93,6 @@ def detect_objects(image_np, w, h, sess, detection_graph):
                 # 0 은 심판
                 elif team_code == 0:
                     otherPoint.append(point)
-
 
                 end = time.time() - start
 
@@ -127,20 +122,14 @@ def main_processing():
     br = (1209, 644)
     trans_matrix, trans_image_w, trans_image_h = tv.get_trans_matrix(tl, bl, tr, br)
 
-    # image = cv2.resize(image, (480, 270), interpolation=cv2.INTER_CUBIC)
-    # cv2.imshow('asd', image)
-    # cv2.imshow('title', trans_image)
-    # cv2.waitKey(1)
-
-
     cap = cv2.VideoCapture('/Users/itaegyeong/Desktop/test.mp4')
 
     while True:
         ret, frame = cap.read()
 
         if ret == True:
-            w = cap.get(3)  # float
-            h = cap.get(4)  # float
+            w = cap.get(3)
+            h = cap.get(4)
 
             image, our_team_point, enemy_team_point, other_point = detect_objects(frame, w, h, sess, detection_graph)
             trans_image, our_trans_team_point, enemy_trans_team_point, trans_other_point = \
@@ -155,7 +144,6 @@ def main_processing():
 
     cap.release()
     cv2.destroyAllWindows()
-
 
 
 main_processing()
