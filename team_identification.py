@@ -31,14 +31,6 @@ def team_division(image):
 
         mask = cv2.inRange(img_hsv, lower, upper)
 
-        shrink = cv2.resize(mask, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
-        cv2.imshow('result', shrink)
-        cv2.waitKey(1)
-
-        shrink2 = cv2.resize(img, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
-        cv2.imshow('test', shrink2)
-        cv2.waitKey(1)
-
         count = 0
         for i in range(0, len(mask)):
             for j in mask[i]:
@@ -47,24 +39,12 @@ def team_division(image):
 
         list.append([code[0], count])
 
-        print(list)
 
 
-    if list[0][1] > list[1][1] and list[0][1] > 100:
+    if list[0][1] > list[1][1] and list[0][1] > 20:
         return -1
-    elif list[0][1] < list[1][1] and list[1][1] > 100:
+    elif list[0][1] < list[1][1] and list[1][1] > 20:
         return 1
     else:
         return 0
-
-
-
-cap = cv2.VideoCapture('/Users/itaegyeong/Desktop/abcd.mp4')
-while True:
-        ret, frame = cap.read()
-        if ret == True:
-            cv2.imshow('f',frame)
-            cv2.waitKey(1)
-
-            #team_division(frame)
 

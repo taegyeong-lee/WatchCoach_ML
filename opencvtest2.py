@@ -1,6 +1,9 @@
 import numpy as np
 import cv2
 
+import opencv_object_detection as ood
+
+
 cap = cv2.VideoCapture('/Users/itaegyeong/Desktop/test.mp4')
 
 # params for ShiTomasi corner detection
@@ -19,7 +22,9 @@ color = np.random.randint(0,255,(100,3))
 
 # Take first frame and find corners in it
 ret, old_frame = cap.read()
-old_gray = cv2.cvtColor(old_frame, cv2.COLOR_BGR2GRAY)
+
+old_gray = ood.mask_color(old_frame)
+
 p0 = cv2.goodFeaturesToTrack(old_gray, mask = None, **feature_params)
 
 # Create a mask image for drawing purposes
@@ -27,7 +32,10 @@ mask = np.zeros_like(old_frame)
 
 while(1):
     ret,frame = cap.read()
-    frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+    frame_gray = ood.mask_color(frame)
+
+
 
     # calculate optical flow
     p1, st, err = cv2.calcOpticalFlowPyrLK(old_gray, frame_gray, p0, None, **lk_params)
@@ -45,7 +53,7 @@ while(1):
     img = cv2.add(frame,mask)
 
     shrink = cv2.resize(img, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
-    cv2.imshow('test', shrink)
+    cv2.imshow('aaaa', shrink)
 
 
     # cv2.imshow('frame',img)

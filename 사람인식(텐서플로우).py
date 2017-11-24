@@ -9,7 +9,6 @@ import time
 
 # local modules
 import team_identification as ti
-import transfer_view as tv
 import canvas_show as cs
 
 
@@ -45,15 +44,15 @@ def detect_objects(image_np, w, h, sess, detection_graph):
         feed_dict={image_tensor: image_np_expanded})
 
     # 시각화, 물체 인식후 박스로 표시
-    vis_util.visualize_boxes_and_labels_on_image_array(
-        image_np,
-        np.squeeze(boxes),
-        np.squeeze(classes).astype(np.int32),
-        np.squeeze(scores),
-        category_index,
-        min_score_thresh=.2,
-        use_normalized_coordinates=True,
-        line_thickness=5)
+    #vis_util.visualize_boxes_and_labels_on_image_array(
+    #    image_np,
+    #    np.squeeze(boxes),
+    #    np.squeeze(classes).astype(np.int32),
+    #    np.squeeze(scores),
+    #    category_index,
+    #    min_score_thresh=.2,
+    #    use_normalized_coordinates=True,
+    #    line_thickness=2)
 
     ourTeamPoint = []
     enemyTeamPoint = []
@@ -67,12 +66,14 @@ def detect_objects(image_np, w, h, sess, detection_graph):
                 br_point = [int(finalBoxPoint[1] * w), int(finalBoxPoint[0] * h)]
                 tl_point = [int(finalBoxPoint[3] * w), int(finalBoxPoint[2] * h)]
 
+                #비정상적인 크기 예외처리
+                if tl_point[0]-br_point[0] > 300 or \
+                    tl_point[0] - br_point[0] < 10 or \
+                    tl_point[1] - br_point[1] > 100:
+                    continue
+
                 # 사람 위치
                 point = (tl_point[0] + (br_point[0] - tl_point[0])/2, tl_point[1])
-
-                # 비정상적인 크기 예외처리
-                if tl_point[0]-br_point[0] > 300:
-                    continue
 
                 # 이미지 몸통만 분리
                 cut_point_y1 = int(br_point[1] + (tl_point[1]-br_point[1])/4.5) # 머리부터 목까지
@@ -84,14 +85,15 @@ def detect_objects(image_np, w, h, sess, detection_graph):
                 # 1 은 아군
                 if team_code == 1:
                     ourTeamPoint.append(point)
+                    cv2.rectangle(image_np, (tuple)(br_point), (tuple)(tl_point), (255, 0, 0), 1)
                 # -1 은 적군
                 elif team_code == -1:
                     enemyTeamPoint.append(point)
+                    cv2.rectangle(image_np, (tuple)(br_point), (tuple)(tl_point), (0, 0, 255), 1)
                 # 0 은 심판
                 elif team_code == 0:
                     otherPoint.append(point)
 
-                end = time.time() - start
 
 
     # 물체인식 완료된 이미지와 아군/적군 위치 반환
@@ -111,15 +113,10 @@ def main_processing():
 
         sess = tf.Session(graph=detection_graph)
 
-    # 버드아이뷰 변환 행렬 구하기
-    tl = (145* 2, 298 * 2)
-    bl = (363 * 2, 538 * 2)
-    tr = (518 * 2, 253 * 2)
-    br = (892 * 2, 445 * 2)
-    trans_matrix, trans_image_w, trans_image_h = tv.get_trans_matrix(tl, bl, tr, br)
 
-    cap = cv2.VideoCapture('/Users/itaegyeong/Desktop/test.mp4')
-    #cap = cv2.VideoCapture('172.16.101.145:8000')
+
+    cap = cv2.VideoCapture('/Users/itaegyeong/Desktop/test.mov')
+
 
     while True:
         ret, frame = cap.read()
@@ -129,21 +126,14 @@ def main_processing():
             h = cap.get(4)
 
             image, our_team_point, enemy_team_point, other_point = detect_objects(frame, w, h, sess, detection_graph)
+            cs.draw_circle2(image,our_team_point,(255,0,0))
+
+            # shrink = cv2.resize(image, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+            cv2.imshow('test', frame)
+            print(our_team_point)
 
 
-            trans_image, our_trans_team_point, enemy_trans_team_point, trans_other_point = \
-                tv.trans_object_point(image, our_team_point, enemy_team_point, other_point, trans_matrix, trans_image_w,
-                                      trans_image_h)
-
-            print("our team trans : ", our_trans_team_point)
-            print("our team  ", our_team_point)
-
-            cs.canvas_show(our_trans_team_point,enemy_trans_team_point, trans_other_point,trans_image_w,trans_image_h)
-
-            shrink = cv2.resize(trans_image, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
-            cv2.imshow('test', shrink)
-
-            if cv2.waitKey(30) & 0xFF == ord('q'):
+            if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
         else:
