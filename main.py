@@ -10,6 +10,8 @@ import time
 # local modules
 import team_identification as ti
 import transfer_view as tv
+import canvas_show as cs
+
 
 # 모델 설정
 CWD_PATH = os.getcwd()
@@ -118,6 +120,7 @@ def main_processing():
     trans_matrix, trans_image_w, trans_image_h = tv.get_trans_matrix(tl, bl, tr, br)
 
     cap = cv2.VideoCapture('/Users/itaegyeong/Desktop/test.mp4')
+    #cap = cv2.VideoCapture('172.16.101.145:8000')
 
     while True:
         ret, frame = cap.read()
@@ -133,6 +136,8 @@ def main_processing():
                 tv.trans_object_point(image, our_team_point, enemy_team_point, other_point, trans_matrix, trans_image_w,
                                       trans_image_h)
 
+
+            cs.canvas_show(our_trans_team_point,enemy_trans_team_point, trans_other_point,trans_image_w,trans_image_h)
 
             shrink = cv2.resize(trans_image, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
             cv2.imshow('test', shrink)

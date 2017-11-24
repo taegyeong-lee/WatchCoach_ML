@@ -1,5 +1,7 @@
 import cv2
 import numpy as np
+import canvas_show as cs
+
 
 # @brief : 변환 행렬 구하는 함수
 # @param : 원래 이미지의 각 꼭짓점 좌표
@@ -46,17 +48,17 @@ def trans_object_point(original_image, our_team_point, enemy_team_point, other_p
     if our_team_point != []:
         original_1 = np.array([(our_team_point)], dtype=np.float32)
         trans_our_team_point = cv2.perspectiveTransform(original_1, trans_matrix)
-        draw_circle(dst, trans_our_team_point,(255, 0, 0))
+        cs.draw_circle(dst, trans_our_team_point,(255, 0, 0))
 
     if enemy_team_point != []:
         original_2 = np.array([(enemy_team_point)], dtype=np.float32)
         trans_enemy_team_point = cv2.perspectiveTransform(original_2, trans_matrix)
-        draw_circle(dst, trans_enemy_team_point,(0, 0, 255))
+        cs.draw_circle(dst, trans_enemy_team_point,(0, 0, 255))
 
     if other_point != []:
         original_3 = np.array([(other_point)], dtype=np.float32)
         trans_other_point = cv2.perspectiveTransform(original_3, trans_matrix)
-        draw_circle(dst, trans_other_point,(0, 0, 0))
+        cs.draw_circle(dst, trans_other_point,(0, 0, 0))
 
     # 점 찍힌 이미지와 변환된 사람 좌표를 리턴함
 
@@ -67,13 +69,7 @@ def trans_object_point(original_image, our_team_point, enemy_team_point, other_p
     return dst, trans_our_team_point, trans_enemy_team_point, trans_other_point
 
 
-# @brief : 테스트(시각화)용 점 찍어주는 함수
-# @param : 이미지, 좌표, 색
-# @return : 없음
-def draw_circle(image, point, rgb):
-    for i in point:
-        for i2 in i:
-            cv2.circle(image, (tuple)(i2), 10, rgb, -1)
+
 
 
 
