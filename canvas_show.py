@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+import random
 
 def canvas_show(our_team_point, enemy_team_point, other_point, w, h):
 
@@ -10,7 +11,6 @@ def canvas_show(our_team_point, enemy_team_point, other_point, w, h):
 
     cv2.imshow('img', img)
     cv2.waitKey(1)
-
 
 
 

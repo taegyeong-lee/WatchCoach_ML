@@ -4,7 +4,7 @@ import argparse as ap
 import cv2
 import dlib
 
-from trashes import get_points
+import get_points
 
 
 def run(source=0, dispLoc=False):
