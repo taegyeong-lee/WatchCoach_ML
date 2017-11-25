@@ -24,7 +24,6 @@ def draw_circle(image, point, rgb):
 
 def draw_circle2(image, point, rgb):
 
-
     point2 = []
     for i in point:
         cv2.circle(image, (int(i[0]),int(i[1])), 3, rgb, -1)
