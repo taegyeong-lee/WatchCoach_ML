@@ -96,7 +96,6 @@ def mask_color(frame):
 
 
 
-
 cam = cv2.VideoCapture('/Users/itaegyeong/Desktop/2.mp4')
 
 while True:
