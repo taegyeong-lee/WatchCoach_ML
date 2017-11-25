@@ -3,7 +3,7 @@ import numpy as np
 
 
 # '../video/test2_640x360.mov
-# /Users/itaegyeong/Desktop/testtest2.mov
+# /Users/itaegyeong/Desktop/testshape.mov
 
 video = cv2.VideoCapture('/Users/itaegyeong/Desktop/testshape.mov')
 mog = cv2.createBackgroundSubtractorMOG2()
@@ -63,8 +63,12 @@ def object_division(color_mask):
 
 def object_tracking(all_center_list, frame_count):
 
-    if len(all_center_list[frame_count]) < len(all_center_list[frame_count-1]):
+    # object count increasing
+    # 어떻게 처리할것인가 ?, 트래킹을 할것인가 ?
+    # 트래킹 한다면 정확도는 어느정도 되는가 ?, 실시간으로 인식할것인가 ?
 
+    if len(all_center_list[frame_count]) < len(all_center_list[frame_count-1]):
+        a=1
 
 
 
@@ -88,14 +92,10 @@ while True:
     frame_count += frame_count
 
 
-
     cv2.imshow('original', frame)
     cv2.imshow('moving_frame',moving_frame)
     cv2.imshow('color_frame', color_mask)
 
 
     cv2.waitKey(1)
-
-
-
 
