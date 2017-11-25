@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 import team_identification as ti
-from trash import opencv_object_detection as oc
+from trashes import opencv_object_detection as oc
 
 cap = cv2.VideoCapture('/Users/itaegyeong/Desktop/test.mp4')
 
