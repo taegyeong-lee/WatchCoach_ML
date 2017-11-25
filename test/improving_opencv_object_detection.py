@@ -80,7 +80,7 @@ def mask_color(frame):
             x, y, w, h = cv2.boundingRect(contours[i])
             print(len(contours[i]),cv2.contourArea(contours[i]),x,w,y,h)
 
-            if w < 30 or h < 30 or w > 70 or h > 70 or y < 70 :
+            if w < 5 or h < 5 :
                 continue
 
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
@@ -92,11 +92,14 @@ def mask_color(frame):
         cv2.imshow("frame2", frame2)
         cv2.imshow("frame",frame)
 
+        out.write(frame)
+
         cv2.waitKey(1)
 
 
 
-cam = cv2.VideoCapture('/Users/itaegyeong/Desktop/2.mp4')
+cam = cv2.VideoCapture('../video/test_soccer.mov')
+out = cv2.VideoWriter('output.mov', -1, 20.0, (640, 360))
 
 while True:
     ret, img = cam.read()
