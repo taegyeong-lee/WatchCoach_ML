@@ -1,8 +1,7 @@
-import numpy as np
 import cv2
+import numpy as np
 
-import opencv_object_detection as ood
-
+from trash import opencv_object_detection as ood
 
 cap = cv2.VideoCapture('/Users/itaegyeong/Desktop/test.mp4')
 

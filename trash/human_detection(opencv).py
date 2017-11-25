@@ -20,7 +20,7 @@ def draw_detections(img, rects, thickness = 1):
 
 hog = cv2.HOGDescriptor()
 hog.setSVMDetector( cv2.HOGDescriptor_getDefaultPeopleDetector() )
-cap=cv2.VideoCapture('/Users/itaegyeong/Desktop/test.mp4')
+cap=cv2.VideoCapture('/Users/itaegyeong/Desktop/test.mov')
 while True:
     _, frame=cap.read()
 

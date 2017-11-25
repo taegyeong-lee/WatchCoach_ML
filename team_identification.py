@@ -40,10 +40,9 @@ def team_division(image):
         list.append([code[0], count])
 
 
-
-    if list[0][1] > list[1][1] and list[0][1] > 20:
+    if list[0][1] > list[1][1] and list[0][1] > 40:
         return -1
-    elif list[0][1] < list[1][1] and list[1][1] > 20:
+    elif list[0][1] < list[1][1] and list[1][1] > 40:
         return 1
     else:
         return 0
