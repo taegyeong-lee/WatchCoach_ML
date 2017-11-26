@@ -43,49 +43,24 @@ def color_detection(frame, rgb_lower, rgb_upper, teamcode):
 # contours 구별
 def contours_division(frame, mask):
     copy = frame.copy()
-    _, contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-
-    for i in contours:
-        x, y, w, h = cv2.boundingRect(i)
-        if w > h or w < 10 or h < 3:
-            continue
-
-        cv2.rectangle(copy, (x, y), (x + w, y + h), (0, 0, 255), 2)
-
-    return copy
-
-
-# contours 구별
-def contours_alg(frame, mask):
-    copy = frame.copy()
-    _, contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-
     point_list = []
 
-    for i in contours:
-        x, y, w, h = cv2.boundingRect(i)
-        print(w)
-        if w > h or y < 130 or w< 10:
+    _, contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-            continue
+ #   for i in contours:
+ #       x, y, w, h = cv2.boundingRect(i)
+ #       if w > h or w < 10 or h < 3:
+ #           continue
 
-        #cv2.drawContours(copy, i, -1, (0, 0, 255), 3)
-        cv2.rectangle(copy, (x, y), (x + w, y + h), (0, 0, 255), -1)
+#        cv2.rectangle(copy, (x, y), (x + w, y + h), (0, 0, 255), 2)
 
-        point_list.append(i)
-
-
+    # 한번 더 예외처리
     for i in range(0,len(point_list)):
-
         x1, y1, w1, h1 = cv2.boundingRect(point_list[i])
-
         for j in range(i + 1,len(point_list)):
             x2, y2, w2, h2 = cv2.boundingRect(point_list[j])
-
             if (x1 < x2 and x1+w1 < x2+w2) or (x2 < x1 and x2+ w2 < x1 + w1):
                 cv2.circle(copy, (int(x1), int(y1)),10, (0,0,255), -1)
-
-
                     #distance = math.sqrt(((x1+x1/2)-(x2+x2/2))*((x1+x1/2)-(x2+x2/2))+((y1+y1/2)-(y2+y2/2))*((y1+y1/2)-(y2+y2/2)))
             #if x2<x1:
             #    x1,x2 = x2,x1
@@ -93,6 +68,41 @@ def contours_alg(frame, mask):
             #if distance < 10 and h1 + h2 < 100:
             #    cv2.line(copy,(x1,y1),(x2,y2),(0,0,255),2)
 
+
+    return copy
+
+
+# contours 구별
+'''
+    # 한번 더 예외처리
+    for i in range(0,len(point_list)):
+        x1, y1, w1, h1 = cv2.boundingRect(point_list[i])
+        for j in range(i + 1,len(point_list)):
+            x2, y2, w2, h2 = cv2.boundingRect(point_list[j])
+            if (x1 < x2 and x1+w1 < x2+w2) or (x2 < x1 and x2+ w2 < x1 + w1):
+                cv2.circle(copy, (int(x1), int(y1)),10, (0,0,255), -1)
+                    #distance = math.sqrt(((x1+x1/2)-(x2+x2/2))*((x1+x1/2)-(x2+x2/2))+((y1+y1/2)-(y2+y2/2))*((y1+y1/2)-(y2+y2/2)))
+            #if x2<x1:
+            #    x1,x2 = x2,x1
+
+            #if distance < 10 and h1 + h2 < 100:
+            #    cv2.line(copy,(x1,y1),(x2,y2),(0,0,255),2)
+            '''
+
+#cv2.drawContours(copy, i, -1, (0, 0, 255), 3)
+def contours_emphasis(frame, mask):
+
+    copy = frame.copy()
+    _, contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+    # 예외처리 후 리스트에 좌표점들 추가
+    point_list = []
+    for i in contours:
+        x, y, w, h = cv2.boundingRect(i)
+
+        if y < 130:
+            continue
+        cv2.rectangle(copy, (x, y), (x + w, y + h), (0, 0, 255), -1)
 
     return copy
 
@@ -119,36 +129,36 @@ def kmeans(img):
 all_list = []
 frame_count = 0
 
-
-
 while True:
 
     ret, frame = video.read()
 
     # 움직이는 물체 감지
     moving_frame = moving_object(frame)
+    # 색상 감지 1번
+    color_detection_mask = color_detection(moving_frame, [0, 120, 80], [10, 255, 255], 1)
+    # 색상 강조 1번
+    contours_emphasis_frame = contours_emphasis(frame,color_detection_mask)
 
-    # 색상 감지
-    color_mask = color_detection(moving_frame, [0, 120, 80], [10, 255, 255], 1)
+    # ---------------------
 
-    # 색상 강조
-    contours_frame = contours_alg(frame,color_mask)
+    # 색상 감지 2번
+    color_detection_mask2 = color_detection(contours_emphasis_frame, [0, 120, 80], [10, 255, 255], 1)
+
+    # 색상 강조 2번
+    contours_emphasis_frame2 = contours_emphasis(contours_emphasis_frame,color_detection_mask2)
 
     # 강조한 색상 감지
-    color_mask2 = color_detection(contours_frame, [0, 244, 244], [2, 255, 255], 1)
+    color_emphasis_mask = color_detection(contours_emphasis_frame2, [0, 244, 244], [2, 255, 255], 1)
 
     # 물체 인식
-    contours_frame2 = contours_division(frame, color_mask2)
-
+    result_frame = contours_division(frame, color_emphasis_mask)
 
     frame_count += frame_count
-    cv2.imshow('contours_frame2', contours_frame2)
-    cv2.imshow('contours', contours_frame)
 
-    #cv2.imshow('original', frame)
-    #cv2.imshow('moving_frame',moving_frame)
-    #cv2.imshow('color_frame', color_mask)
-    #cv2.imshow('color_frame2', color_mask2)
+    cv2.imshow('color_detection_mask', color_detection_mask)
+    cv2.imshow('color_emphasis_mask', color_emphasis_mask)
+    cv2.imshow('contours_emphasis_frame2', color_detection_mask2)
+    cv2.imshow('result_frame', result_frame)
 
-    #cv2.imshow('kmeans', kmeans_frame)
     cv2.waitKey(0)
