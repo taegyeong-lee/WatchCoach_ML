@@ -46,10 +46,10 @@ def contours_division(frame, mask):
 
     for i in contours:
         x, y, w, h = cv2.boundingRect(i)
-        if w > h or w < 10 or len(i) < 40 or w > 70:
-            continue
+        #if w > h or w < 10 or len(i) < 40 or w > 70:
+        #    continue
 
-        cv2.rectangle(copy, (x, y), (x + w, y + h), (0, 255, 0), 2)
+        cv2.rectangle(copy, (x, y), (x + w, y + h), (0, 0, 255), 2)
 
     return copy
 
@@ -66,23 +66,17 @@ def contours_alg(frame, mask):
         if w > h or w < 10 or len(i) < 40 or w > 70:
             continue
         cv2.drawContours(copy, i, -1, (0, 0, 255), 3)
-        #cv2.circle(copy, (int(x + w / 2), int(y + h / 2)), 3, (0, 255, 0), 2)
+        cv2.rectangle(copy, (x, y), (x + w, y + h), (0, 0, 255), -1)
+
         point_list.append(i)
 
-    for i in range(0,len(point_list)):
-        x1, y1, w1, h1 = cv2.boundingRect(point_list[i])
-        for j in range(i + 1,len(point_list)):
-            x2, y2, w2, h2 = cv2.boundingRect(point_list[j])
-
-            #distance = math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2))
-            #if distance < 20:
-            #    cv2.line(copy,(x1,y1),(x2,y2),(0,255,0),3)
-
-
-            if w < w2 and h < h2 and x > x2 and y > y2:
-                continue
-
-            cv2.rectangle(copy, (x, y), (x + w, y + h), (0, 0, 255), 2)
+    #for i in range(0,len(point_list)):
+    #    x1, y1, w1, h1 = cv2.boundingRect(point_list[i])
+    #    for j in range(i + 1,len(point_list)):
+    #        x2, y2, w2, h2 = cv2.boundingRect(point_list[j])
+    #        distance = math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2))
+    #        if distance < 20:
+    #            cv2.line(copy,(x1,y1),(x2,y2),(0,255,0),3)
 
     return copy
 
@@ -92,24 +86,39 @@ def kmeans(frame, K=5):
     ret, label, center = cv2.kmeans(Z, 2, None, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)
 
 
-
 all_list = []
 frame_count = 0
 
+fourcc = cv2.VideoWriter_fourcc(*'XVID')
+out = cv2.VideoWriter('output2.mp4',fourcc, 20.0, (640,360))
+
 
 while True:
+
     ret, frame = video.read()
 
     moving_frame = moving_object(frame)
     color_mask = color_detection(moving_frame, [0, 120, 80], [10, 255, 255], 1)
+
     contours_frame = contours_alg(frame,color_mask)
+
+
+    color_mask2 = color_detection(contours_frame, [0, 244, 244], [2, 255, 255], 1)
+    contours_frame2 = contours_division(frame, color_mask2)
+
+    out.write(contours_frame2)
+
+
     #kmeans_frame = kmeans(frame,3)
 
 
     frame_count += frame_count
+    cv2.imshow('contours_frame2', contours_frame2)
     cv2.imshow('contours', contours_frame)
     cv2.imshow('original', frame)
     cv2.imshow('moving_frame',moving_frame)
     cv2.imshow('color_frame', color_mask)
+    cv2.imshow('color_frame2', color_mask2)
+
     #cv2.imshow('kmeans', kmeans_frame)
     cv2.waitKey(1)
