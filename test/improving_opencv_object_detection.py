@@ -46,12 +46,43 @@ def contours_division(frame, mask):
 
     for i in contours:
         x, y, w, h = cv2.boundingRect(i)
-        if w > h or w < 10 or len(i) < 40 or w> 70:
+        if w > h or w < 10 or len(i) < 40 or w > 70:
             continue
 
         cv2.rectangle(copy, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
     return copy
+
+
+
+# contours 구별
+def contours_alg(frame, mask):
+    copy = frame.copy()
+    _, contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+    point_list = []
+
+    for i in contours:
+        x, y, w, h = cv2.boundingRect(i)
+        if w > h or w < 10 or len(i) < 40 or w > 70:
+            continue
+
+        point_list.append(i)
+
+
+    for i in range(0,len(point_list)):
+        x, y, w, h = cv2.boundingRect(point_list[i])
+        for j in range(i + 1,len(point_list)):
+            x2, y2, w2, h2 = cv2.boundingRect(point_list[j])
+
+            if w < w2 and h < h2 and x > x2 and y > y2:
+                continue
+
+            cv2.rectangle(copy, (x, y), (x + w, y + h), (0, 0, 255), 2)
+
+    return copy
+
+
 
 def kmeans(frame, K=5):
     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
@@ -68,7 +99,7 @@ while True:
 
     moving_frame = moving_object(frame)
     color_mask = color_detection(moving_frame, [0, 120, 80], [10, 255, 255], 1)
-    contours_frame = contours_division(frame,color_mask)
+    contours_frame = contours_alg(frame,color_mask)
     #kmeans_frame = kmeans(frame,3)
 
 
