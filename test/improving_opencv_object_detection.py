@@ -46,11 +46,17 @@ def contours_division(frame, mask):
 
     for i in contours:
         x, y, w, h = cv2.boundingRect(i)
-        if w > h or w < 10 or len(i) < 40:
+        if w > h or w < 10 or len(i) < 40 or w> 70:
             continue
+
         cv2.rectangle(copy, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
     return copy
+
+def kmeans(frame, K=5):
+    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
+    ret, label, center = cv2.kmeans(Z, 2, None, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)
+
 
 
 all_list = []
@@ -63,12 +69,13 @@ while True:
     moving_frame = moving_object(frame)
     color_mask = color_detection(moving_frame, [0, 120, 80], [10, 255, 255], 1)
     contours_frame = contours_division(frame,color_mask)
+    #kmeans_frame = kmeans(frame,3)
+
 
     frame_count += frame_count
     cv2.imshow('contours', contours_frame)
     cv2.imshow('original', frame)
     cv2.imshow('moving_frame',moving_frame)
     cv2.imshow('color_frame', color_mask)
-
+    #cv2.imshow('kmeans', kmeans_frame)
     cv2.waitKey(1)
-
