@@ -125,20 +125,20 @@ while True:
 
     ret, frame = video.read()
 
+    # 움직이는 물체 감지
     moving_frame = moving_object(frame)
+
+    # 색상 감지
     color_mask = color_detection(moving_frame, [0, 120, 80], [10, 255, 255], 1)
 
+    # 색상 강조
     contours_frame = contours_alg(frame,color_mask)
 
-
+    # 강조한 색상 감지
     color_mask2 = color_detection(contours_frame, [0, 244, 244], [2, 255, 255], 1)
 
-
-
+    # 물체 인식
     contours_frame2 = contours_division(frame, color_mask2)
-
-
-    # kmeans_frame = kmeans(color_mask2)
 
 
     frame_count += frame_count
