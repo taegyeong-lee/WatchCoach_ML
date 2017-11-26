@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import math
+import kmeans
 
 
 # '../video/test2_640x360.mov
@@ -46,8 +47,8 @@ def contours_division(frame, mask):
 
     for i in contours:
         x, y, w, h = cv2.boundingRect(i)
-        #if w > h or w < 10 or len(i) < 40 or w > 70:
-        #    continue
+        if w > h or w < 10 or h < 3:
+            continue
 
         cv2.rectangle(copy, (x, y), (x + w, y + h), (0, 0, 255), 2)
 
@@ -63,34 +64,61 @@ def contours_alg(frame, mask):
 
     for i in contours:
         x, y, w, h = cv2.boundingRect(i)
-        if w > h or w < 10 or len(i) < 40 or w > 70:
+        print(w)
+        if w > h or y < 130 or w< 10:
+
             continue
-        cv2.drawContours(copy, i, -1, (0, 0, 255), 3)
+
+        #cv2.drawContours(copy, i, -1, (0, 0, 255), 3)
         cv2.rectangle(copy, (x, y), (x + w, y + h), (0, 0, 255), -1)
 
         point_list.append(i)
 
-    #for i in range(0,len(point_list)):
-    #    x1, y1, w1, h1 = cv2.boundingRect(point_list[i])
-    #    for j in range(i + 1,len(point_list)):
-    #        x2, y2, w2, h2 = cv2.boundingRect(point_list[j])
-    #        distance = math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2))
-    #        if distance < 20:
-    #            cv2.line(copy,(x1,y1),(x2,y2),(0,255,0),3)
+
+    for i in range(0,len(point_list)):
+
+        x1, y1, w1, h1 = cv2.boundingRect(point_list[i])
+
+        for j in range(i + 1,len(point_list)):
+            x2, y2, w2, h2 = cv2.boundingRect(point_list[j])
+
+            if (x1 < x2 and x1+w1 < x2+w2) or (x2 < x1 and x2+ w2 < x1 + w1):
+                cv2.circle(copy, (int(x1), int(y1)),10, (0,0,255), -1)
+
+
+                    #distance = math.sqrt(((x1+x1/2)-(x2+x2/2))*((x1+x1/2)-(x2+x2/2))+((y1+y1/2)-(y2+y2/2))*((y1+y1/2)-(y2+y2/2)))
+            #if x2<x1:
+            #    x1,x2 = x2,x1
+
+            #if distance < 10 and h1 + h2 < 100:
+            #    cv2.line(copy,(x1,y1),(x2,y2),(0,0,255),2)
+
 
     return copy
 
 
-def kmeans(frame, K=5):
+def kmeans(img):
+    Z = img.reshape((-1, 3))
+
+    # convert to np.float32
+    Z = np.float32(Z)
+
+    # define criteria, number of clusters(K) and apply kmeans()
     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
-    ret, label, center = cv2.kmeans(Z, 2, None, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)
+    K = 5
+    ret, label, center = cv2.kmeans(Z, K, None, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)
+
+    # Now convert back into uint8, and make original image
+    center = np.uint8(center)
+    res = center[label.flatten()]
+    res2 = res.reshape((img.shape))
+    return res2
+
 
 
 all_list = []
 frame_count = 0
 
-fourcc = cv2.VideoWriter_fourcc(*'XVID')
-out = cv2.VideoWriter('output2.mp4',fourcc, 20.0, (640,360))
 
 
 while True:
@@ -104,21 +132,23 @@ while True:
 
 
     color_mask2 = color_detection(contours_frame, [0, 244, 244], [2, 255, 255], 1)
+
+
+
     contours_frame2 = contours_division(frame, color_mask2)
 
-    out.write(contours_frame2)
 
-
-    #kmeans_frame = kmeans(frame,3)
+    # kmeans_frame = kmeans(color_mask2)
 
 
     frame_count += frame_count
     cv2.imshow('contours_frame2', contours_frame2)
     cv2.imshow('contours', contours_frame)
-    cv2.imshow('original', frame)
-    cv2.imshow('moving_frame',moving_frame)
-    cv2.imshow('color_frame', color_mask)
-    cv2.imshow('color_frame2', color_mask2)
+
+    #cv2.imshow('original', frame)
+    #cv2.imshow('moving_frame',moving_frame)
+    #cv2.imshow('color_frame', color_mask)
+    #cv2.imshow('color_frame2', color_mask2)
 
     #cv2.imshow('kmeans', kmeans_frame)
-    cv2.waitKey(1)
+    cv2.waitKey(0)
