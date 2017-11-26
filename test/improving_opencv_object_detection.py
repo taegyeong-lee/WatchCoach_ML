@@ -54,7 +54,6 @@ def contours_division(frame, mask):
     return copy
 
 
-
 # contours 구별
 def contours_alg(frame, mask):
     copy = frame.copy()
@@ -66,14 +65,19 @@ def contours_alg(frame, mask):
         x, y, w, h = cv2.boundingRect(i)
         if w > h or w < 10 or len(i) < 40 or w > 70:
             continue
-
+        cv2.drawContours(copy, i, -1, (0, 0, 255), 3)
+        #cv2.circle(copy, (int(x + w / 2), int(y + h / 2)), 3, (0, 255, 0), 2)
         point_list.append(i)
 
-
     for i in range(0,len(point_list)):
-        x, y, w, h = cv2.boundingRect(point_list[i])
+        x1, y1, w1, h1 = cv2.boundingRect(point_list[i])
         for j in range(i + 1,len(point_list)):
             x2, y2, w2, h2 = cv2.boundingRect(point_list[j])
+
+            #distance = math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2))
+            #if distance < 20:
+            #    cv2.line(copy,(x1,y1),(x2,y2),(0,255,0),3)
+
 
             if w < w2 and h < h2 and x > x2 and y > y2:
                 continue
@@ -81,7 +85,6 @@ def contours_alg(frame, mask):
             cv2.rectangle(copy, (x, y), (x + w, y + h), (0, 0, 255), 2)
 
     return copy
-
 
 
 def kmeans(frame, K=5):

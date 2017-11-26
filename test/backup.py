@@ -43,6 +43,7 @@ def mask_color(frame):
         frame2_hsv = cv2.cvtColor(frame2.copy(),cv2.COLOR_BGR2HSV)
         mask2 = cv2.inRange(frame2_hsv, lower, upper)
 
+
         _, contours, _ = cv2.findContours(mask2, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
 
