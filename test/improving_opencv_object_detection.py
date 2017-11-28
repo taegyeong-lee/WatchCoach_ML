@@ -7,7 +7,7 @@ import kmeans
 # '../video/test2_640x360.mov
 # /Users/itaegyeong/Desktop/testshape.mov
 
-video = cv2.VideoCapture('/Users/itaegyeong/Desktop/test_1.mov')
+video = cv2.VideoCapture('/Users/itaegyeong/Desktop/test.mov')
 mog = cv2.createBackgroundSubtractorMOG2()
 
 termination = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 1)
@@ -100,7 +100,7 @@ def kmeans(img):
 
     # define criteria, number of clusters(K) and apply kmeans()
     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
-    K = 2
+    K = 3
     ret, label, center = cv2.kmeans(Z, K, None, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)
 
     # Now convert back into uint8, and make original image
@@ -120,9 +120,18 @@ while True:
 
     # 움직이는 물체 감지
     moving_frame = moving_object(frame)
+    cv2.imshow('k',kmeans(moving_frame))
+
+
 
     # 색상 강조 1번
+    red_detection_mask = color_detection(moving_frame, [0, 120, 50], [30, 255, 255], 1)
+    red_detection_mask2 = color_detection(moving_frame, [150, 150, 50], [190, 255, 255], 1)
+
+    img2_fg = cv2.add(red_detection_mask,red_detection_mask2)
+
     color_detection_mask = color_detection(moving_frame, [0, 120, 80], [10, 255, 255], 1)
+
     contours_emphasis_frame = contours_emphasis(moving_frame,color_detection_mask, 0, -1)
 
     # 색상 강조 2번
@@ -133,11 +142,25 @@ while True:
     color_detection_mask3 = color_detection(contours_emphasis_frame2, [0, 120, 80], [10, 255, 255], 1)
     contours_emphasis_frame3 = contours_emphasis(frame,color_detection_mask3, 1, 2)
 
+    red_detection_mask_shrink = cv2.resize(red_detection_mask, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+    red_detection_mask_shrink2 = cv2.resize(red_detection_mask2, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+
+    frame_shrink = cv2.resize(frame, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+    img2_fg = cv2.resize(img2_fg, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
 
 
-    cv2.imshow('color_detection_mask', color_detection_mask)
-    cv2.imshow('color_detection_mask2', color_detection_mask2)
-    cv2.imshow('color_detection_mask3', color_detection_mask3)
-    cv2.imshow('contours_emphasis_frame', contours_emphasis_frame3)
+    color_detection_mask_shrink2 = cv2.resize(color_detection_mask2, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+
+    color_detection_mask_shrink3 = cv2.resize(color_detection_mask3, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+
+    contours_emphasis_frame_shrink = cv2.resize(contours_emphasis_frame, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+
+    cv2.imshow('m', moving_frame)
+    cv2.imshow('color_detection_mask', red_detection_mask_shrink)
+    cv2.imshow('color_detection_mask2', red_detection_mask_shrink2)
+    cv2.imshow('img2_fg', img2_fg)
+
+    cv2.imshow('frame', frame_shrink)
+
 
     cv2.waitKey(1)

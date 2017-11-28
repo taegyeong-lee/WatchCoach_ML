@@ -9,3 +9,12 @@ hsv_green = cv2.cvtColor(green,cv2.COLOR_BGR2HSV)
 
 print(hsv_green)
 
+
+# [[[178 155  94]]]
+#[[[176 166 114]]]
+#
+# 160, 150, 80
+#
+#
+#
+# [[[  0 166 114]]]
