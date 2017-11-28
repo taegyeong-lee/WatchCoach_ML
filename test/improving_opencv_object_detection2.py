@@ -131,22 +131,24 @@ while True:
 
     contours_emphasis_frame = contours_emphasis(moving_frame,red_detection_mask, 0, -1)
 
-    cv2.imshow(contours_emphasis_frame)
+    cv2.imshow('contours_emphasis_frame',contours_emphasis_frame)
 
 
     # 색상 강조 2번
     color_detection_mask2 = color_detection(contours_emphasis_frame, [0, 120, 80], [10, 255, 255], 1)
     contours_emphasis_frame2 = contours_emphasis(contours_emphasis_frame,color_detection_mask2,1, -1)
 
+    cv2.imshow('contours_emphasis_frame2',contours_emphasis_frame2)
+
     # 색상 강조 3번 및 출력
     color_detection_mask3 = color_detection(contours_emphasis_frame2, [0, 120, 80], [10, 255, 255], 1)
     contours_emphasis_frame3 = contours_emphasis(frame,color_detection_mask3, 1, 2)
 
-    red_detection_mask_shrink = cv2.resize(red_detection_mask, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
-    red_detection_mask_shrink2 = cv2.resize(red_detection_mask2, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+    cv2.imshow('contours_emphasis_frame3',contours_emphasis_frame3)
 
-    frame_shrink = cv2.resize(frame, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
-    img2_fg = cv2.resize(img2_fg, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+    #red_detection_mask_shrink = cv2.resize(red_detection_mask, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+    #red_detection_mask_shrink2 = cv2.resize(red_detection_mask2, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+
 
 
     color_detection_mask_shrink2 = cv2.resize(color_detection_mask2, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
@@ -156,11 +158,11 @@ while True:
     contours_emphasis_frame_shrink = cv2.resize(contours_emphasis_frame, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
 
     cv2.imshow('m', moving_frame)
-    cv2.imshow('color_detection_mask', red_detection_mask_shrink)
-    cv2.imshow('color_detection_mask2', red_detection_mask_shrink2)
-    cv2.imshow('img2_fg', img2_fg)
+   # cv2.imshow('color_detection_mask', red_detection_mask_shrink)
+   # cv2.imshow('color_detection_mask2', red_detection_mask_shrink2)
 
-    cv2.imshow('frame', frame_shrink)
+
+   # cv2.imshow('frame', frame_shrink)
 
 
     cv2.waitKey(0)
