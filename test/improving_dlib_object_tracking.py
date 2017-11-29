@@ -16,7 +16,7 @@ def run(source=0, dispLoc=False):
         print("Video device or file couldn't be opened")
         exit()
 
-    print("Press key `p` to pause the video to start tracking")
+    print("Press key `p` to pause the input_sample_video to start tracking")
     while True:
         # Retrieve an image and Display it.
         retval, img = cam.read()
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     parser.add_argument('-l', "--dispLoc", dest="dispLoc", action="store_true")
     args = vars(parser.parse_args())
 
-    # Get the source of video
+    # Get the source of input_sample_video
     if args["videoFile"]:
         source = args["videoFile"]
     else:

@@ -4,7 +4,7 @@ import math
 import kmeans
 
 #cv2.drawContours(copy, i, -1, (0, 0, 255), 3)
-# '../video/test2_640x360.mov
+# '../input_sample_video/test2_640x360.mov
 # /Users/itaegyeong/Desktop/testshape.mov
 
 video = cv2.VideoCapture('/Users/itaegyeong/Desktop/20171127_195948.mov')
@@ -114,12 +114,21 @@ def kmeans(img):
 all_list = []
 frame_count = 0
 
+ret, frame = video.read()
+
+# 움직이는 물체 감지
+moving_frame = moving_object(frame)
+
 while True:
 
     ret, frame = video.read()
 
     # 움직이는 물체 감지
     moving_frame = moving_object(frame)
+
+
+    cv2.imshow('moving',frame)
+
 
     # 색상 강조 1번
     red_detection_mask = color_detection(moving_frame, [0, 120, 50], [30, 255, 255], 1)

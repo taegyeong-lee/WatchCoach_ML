@@ -2,8 +2,9 @@ import cv2, sys
 import numpy as np
 
 cv2.namedWindow('frame', cv2.WINDOW_NORMAL)
+
 cap = cv2.VideoCapture()
-cap.open("rtmp://172.16.101.160:1935/live/stream")
+cap.open("rtmp://172.16.101.135/live/stream")
 
 if not cap.open:
     print("a")

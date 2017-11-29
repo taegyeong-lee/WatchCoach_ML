@@ -6,6 +6,10 @@ mog = cv2.createBackgroundSubtractorMOG2()
 termination = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 1)
 
 
+
+
+
+
 # 축소 팽창시키기
 def morphology(frame):
     # Kernel Filter
@@ -53,6 +57,10 @@ ret, frame = video.read()
 
 point = []
 
+first_frame = cv2.cvtColor(frame,cv2.COLOR_RGB2GRAY)
+
+
+
 # 움직이는 물체 감지
 moving_frame = moving_mask(frame)
 
@@ -99,6 +107,16 @@ cv2.imshow('f',frame)
 while True:
     ret, frame = video.read()
 
+
+    test = cv2.absdiff(cv2.cvtColor(frame,cv2.COLOR_RGB2GRAY),first_frame)
+    cv2.imshow('test',test)
+
+    thresh, im_bw = cv2.threshold(test,128,256,cv2.THRESH_BINARY | cv2.THRESH_OTSU)
+    cv2.imshow('bw',im_bw)
+
+
+
+
     for p in point:
 
         r, h, c, w = p[0], p[1], p[2], p[3]  # simply hardcoded the values
@@ -127,6 +145,10 @@ while True:
         pts = cv2.boxPoints(ret)
         pts = np.int0(pts)
         img = cv2.polylines(frame, [pts], True, 255, 2)
+
+        cv2.circle(img, (int(c+w/2),int(r+h/2)),3, [0,255,0])
+
+
 
        #x, y, w, h = track_window
        # img2 = cv2.rectangle(frame, (x, y), (x + w, y + h), 255, 2)

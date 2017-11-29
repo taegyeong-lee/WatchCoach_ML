@@ -37,7 +37,7 @@ i=0
 
 
 
-for i in range(0, 100):
+while True:
 
     print(i)
     kalman.correct(mp)
@@ -52,9 +52,7 @@ for i in range(0, 100):
     if k == 27: break
     if k == 32: reset()
 
-    i=i+1
-    if i == 10000:
-        break
+
 
 
 def kalman_filter(point_list,frame):

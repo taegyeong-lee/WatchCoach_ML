@@ -4,7 +4,7 @@ import math
 import kmeans
 
 #cv2.drawContours(copy, i, -1, (0, 0, 255), 3)
-# '../video/test2_640x360.mov
+# '../input_sample_video/test2_640x360.mov
 # /Users/itaegyeong/Desktop/testshape.mov
 
 video = cv2.VideoCapture('/Users/itaegyeong/Desktop/20171127_195948.mov')
