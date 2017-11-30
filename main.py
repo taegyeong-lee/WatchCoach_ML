@@ -118,7 +118,7 @@ def main_processing():
     br = (892 * 2, 445 * 2)
     trans_matrix, trans_image_w, trans_image_h = tv.get_trans_matrix(tl, bl, tr, br)
 
-    cap = cv2.VideoCapture('/Users/itaegyeong/Desktop/test.mp4')
+    cap = cv2.VideoCapture('/Users/itaegyeong/Desktop/3.mov')
     #cap = cv2.VideoCapture('172.16.101.145:8000')
 
     while True:

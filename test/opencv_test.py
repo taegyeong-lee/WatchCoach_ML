@@ -7,9 +7,6 @@ termination = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 1)
 
 
 
-
-
-
 # 축소 팽창시키기
 def morphology(frame):
     # Kernel Filter

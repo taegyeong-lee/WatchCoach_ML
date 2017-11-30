@@ -63,7 +63,7 @@ def detect_objects(image_np, w, h, sess, detection_graph):
 
     for detectionObject, detectionScore, detectionBox in zip(classes, scores, boxes):
         for finalObject, finalScore, finalBoxPoint in zip(detectionObject, detectionScore, detectionBox):
-            if finalObject == 1 and finalScore > 0.05:
+            if finalObject == 1 and finalScore > 0.1:
 
                 # top left, bottom right
                 br_point = [int(finalBoxPoint[1] * w), int(finalBoxPoint[0] * h)]
@@ -92,7 +92,7 @@ def detect_objects(image_np, w, h, sess, detection_graph):
                 # -1 은 적군
                 elif team_code == -1:
                     enemyTeamPoint.append(point)
-                    cv2.rectangle(image_np, (tuple)(br_point), (tuple)(tl_point), (0, 0, 255), 1)
+                    cv2.rectangle(image_np, (tuple)(br_point), (tuple)(tl_point), (0, 255, 0), 1)
                 # 0 은 심판
                 elif team_code == 0:
                     otherPoint.append(point)
@@ -117,7 +117,7 @@ def main_processing():
         sess = tf.Session(graph=detection_graph)
 
 
-    cap = cv2.VideoCapture('/Users/itaegyeong/Desktop/test_11.mov')
+    cap = cv2.VideoCapture('/Users/itaegyeong/Desktop/3.mov')
 
 
     while True:
@@ -137,7 +137,7 @@ def main_processing():
             pre_our_team_point = our_team_point
 
 
-            if cv2.waitKey(1) & 0xFF == ord('q'):
+            if cv2.waitKey(0) & 0xFF == ord('q'):
                 break
 
         else:
