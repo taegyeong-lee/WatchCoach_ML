@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-video = cv2.VideoCapture('/Users/itaegyeong/Desktop/20171127_195948.mov')
+video = cv2.VideoCapture('/Users/itaegyeong/Desktop/good.mov')
 mog = cv2.createBackgroundSubtractorMOG2()
 termination = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 1)
 
@@ -54,7 +54,7 @@ ret, frame = video.read()
 
 point = []
 
-first_frame = cv2.cvtColor(frame,cv2.COLOR_RGB2GRAY)
+#first_frame = cv2.cvtColor(frame,cv2.COLOR_RGB2GRAY)
 
 
 
@@ -103,14 +103,6 @@ cv2.imshow('f',frame)
 
 while True:
     ret, frame = video.read()
-
-
-    test = cv2.absdiff(cv2.cvtColor(frame,cv2.COLOR_RGB2GRAY),first_frame)
-    cv2.imshow('test',test)
-
-    thresh, im_bw = cv2.threshold(test,128,256,cv2.THRESH_BINARY | cv2.THRESH_OTSU)
-    cv2.imshow('bw',im_bw)
-
 
 
 

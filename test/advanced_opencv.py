@@ -1,7 +1,5 @@
 import cv2
 import numpy as np
-import histogram_opencv
-
 
 
 video = cv2.VideoCapture('/Users/itaegyeong/Desktop/3.mov')
