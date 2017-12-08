@@ -13,7 +13,6 @@ def canvas_show(our_team_point, enemy_team_point, other_point, w, h):
     cv2.waitKey(1)
 
 
-
 # @brief : 테스트(시각화)용 점 찍어주는 함수
 # @param : 이미지, 좌표, 색
 # @return : 없음
