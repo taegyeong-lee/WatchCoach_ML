@@ -54,8 +54,6 @@ while True:
 
     cv2.imshow('c',copy)
 
-
-
     cv2.imshow('moving_mask',moving_mask)
 
     cv2.waitKey(0)

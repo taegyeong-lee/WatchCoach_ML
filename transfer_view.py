@@ -44,21 +44,34 @@ def trans_object_point(original_image, our_team_point, enemy_team_point, other_p
 
     dst = cv2.warpPerspective(original_image, trans_matrix, (trans_image_weight, trans_image_height))
 
-    # 좌표 변환하고 테스트를 위해 점 찍기
-    if our_team_point != []:
-        original_1 = np.array([(our_team_point)], dtype=np.float32)
-        trans_our_team_point = cv2.perspectiveTransform(original_1, trans_matrix)
-        cs.draw_circle(dst, trans_our_team_point,(255, 0, 0))
+    original_1 = np.array([(our_team_point)], dtype=np.float32)
+    trans_our_team_point = cv2.perspectiveTransform(original_1, trans_matrix)
 
-    if enemy_team_point != []:
-        original_2 = np.array([(enemy_team_point)], dtype=np.float32)
-        trans_enemy_team_point = cv2.perspectiveTransform(original_2, trans_matrix)
-        cs.draw_circle(dst, trans_enemy_team_point,(0, 0, 255))
+    print(trans_our_team_point)
+    cs.draw_circle(dst, trans_our_team_point, (255, 0, 0))
 
-    if other_point != []:
-        original_3 = np.array([(other_point)], dtype=np.float32)
-        trans_other_point = cv2.perspectiveTransform(original_3, trans_matrix)
-        cs.draw_circle(dst, trans_other_point,(0, 0, 0))
+    cs.canvas_show(trans_our_team_point,trans_enemy_team_point,trans_other_point,trans_image_weight,trans_image_height)
+
+    cv2.imshow('dst',dst)
+
+
+    #
+    # # 좌표 변환하고 테스트를 위해 점 찍기
+    # if our_team_point != []:
+    #     original_1 = np.array([(our_team_point)], dtype=np.float32)
+    #     print(our_team_point)
+    #     trans_our_team_point = cv2.perspectiveTransform(original_1, trans_matrix)
+    #     cs.draw_circle(dst, trans_our_team_point,(255, 0, 0))
+    #
+    # if enemy_team_point != []:
+    #     original_2 = np.array([(enemy_team_point)], dtype=np.float32)
+    #     trans_enemy_team_point = cv2.perspectiveTransform(original_2, trans_matrix)
+    #     cs.draw_circle(dst, trans_enemy_team_point,(0, 0, 255))
+    #
+    # if other_point != []:
+    #     original_3 = np.array([(other_point)], dtype=np.float32)
+    #     trans_other_point = cv2.perspectiveTransform(original_3, trans_matrix)
+    #     cs.draw_circle(dst, trans_other_point,(0, 0, 0))
 
     # 점 찍힌 이미지와 변환된 사람 좌표를 리턴함
 

@@ -1,11 +1,21 @@
 import cv2
 import numpy as np
+import transfer_view as tv
+
 
 
 video = cv2.VideoCapture('/Users/itaegyeong/Desktop/good.mov')
 knn = cv2.createBackgroundSubtractorKNN()
 
 point = []
+
+frame_count = 0
+
+M,trans_h,trans_w = tv.get_trans_matrix([2,183],[259,345],[163,58],[524,32])
+
+enemy_team_point =[]
+other_point = []
+
 
 
 while True:
@@ -35,12 +45,32 @@ while True:
         if area < 200 or y < 40:
             continue
 
-        point.append([x,y,w,h])
+        if frame_count < 1500:
+            if y < 75 or x > 540 and x < 550:
+                continue
+        else:
+            if w > h or (y > 65 and y < 70 and x > 230 and x < 266) or (x > 470 and x < 475 and y < 75 and y > 65):
+                continue
 
+
+        # point.append([x,y,w,h])
+        point.append([x,y])
         print(x, y, area)
 
         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
     cv2.imshow('frame',frame)
+
+    dst, trans_our_team_point, trans_enemy_team_point, trans_other_point = tv.trans_object_point(frame, point, enemy_team_point, other_point, M, trans_w, trans_h)
+
+    cv2.imshow('trans',dst)
+
+
+    frame_count = frame_count + 1
     cv2.waitKey(0)
+
+
+
+
+
 
