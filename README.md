@@ -5,24 +5,6 @@
 
 
 
-## Feature
-
-- **main.py :** mp4 동영상으로부터 사람인식(object detection, 텐서플로우 기본모델 사용)
-
-- **team_identification.py :** 인식한 사람의 아군(1)과 적군(-1) 그리고 기타(0)로 구별
-
-- **transfer_view.py :** 원래 영상의 카메라에서의 사람의 좌표를 Bird'eyes View(Top View)로 좌표 변환
-
-- **video :** test video
-
-- test/improving_dlib_object_tracking.py : object tracking with dlib
-
-- test/improving_opencv_object_detection.py : object detection with opencv
-
-- test/improving_tensor_object_detection.py : object detection with tensorflow
-
-  ​
-
 
 
 ## Lib
