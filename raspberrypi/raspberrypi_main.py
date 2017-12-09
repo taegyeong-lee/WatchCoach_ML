@@ -12,7 +12,7 @@ if cap.isOpened():
         ret, frame = cap.read()
         if ret is True:
             # Get stadium frame and stadium's points [ [x1,y1], [x2,y2], [x3,y3], [x4,y4] ]
-            #stadium_point, stadium_frame = gsp.main(frame)
+            # stadium_point, stadium_frame = gsp.main(frame)
             stadium_frame = frame
 
             # Get trans Matrix, trans image weight and height
@@ -24,31 +24,19 @@ if cap.isOpened():
                                                                   [526, 147])
 
             # Get object's points
-            our_team_point, enemy_team_point, other_point = gop.main(stadium_frame)
+            find_frame, our_team_point, enemy_team_point, other_point = gop.main(stadium_frame)
 
             # Get trans object's points
             dst, trans_our_team_point, trans_enemy_team_point, trans_other_point = \
-                gtv.trans_object_point(stadium_frame, our_team_point, enemy_team_point,
+                gtv.trans_object_point(find_frame, our_team_point, enemy_team_point,
                                        other_point, trans_matrix, trans_w, trans_h)
-
-
 
             result_frame = dp.canvas_show(trans_our_team_point, trans_enemy_team_point, trans_other_point, trans_w, trans_h)
 
-
             cv2.imshow('result_frame',result_frame)
             cv2.imshow('bird eye view', dst)
+            cv2.imshow('find object frame',find_frame)
             #cv2.imshow('stadium frame',stadium_frame)
             cv2.imshow('original_frame',frame)
 
             cv2.waitKey(1)
-
-
-
-
-
-
-
-
-        
-

@@ -20,9 +20,7 @@ def canvas_show(our_team_point, enemy_team_point, other_point, w, h):
     background_img = cv2.imread('/Users/itaegyeong/Desktop/background.png') # 407x720
 
     if our_team_point != []:
-        print(our_team_point)
         our_team_point = standard_point(our_team_point,w,h)
-        print(our_team_point)
         draw_circle(background_img, our_team_point, (255, 0, 0))
 
     if enemy_team_point != []:
@@ -34,6 +32,7 @@ def canvas_show(our_team_point, enemy_team_point, other_point, w, h):
         draw_circle(background_img, other_point, (0, 255, 0))
 
     return background_img
+
 
 def draw_circle(image, point, rgb):
     for i in point:

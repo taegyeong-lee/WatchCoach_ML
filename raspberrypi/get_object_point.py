@@ -20,7 +20,6 @@ def team_division(frame):
         upper = np.array(upper, dtype='uint8')
 
         mask = cv2.inRange(opening_hsv, lower, upper)
-        cv2.imshow('masks', mask)
 
         _, contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
         for c in contours:
@@ -46,8 +45,6 @@ def team_division(frame):
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
                 other_point.append([center_x,center_y])
 
-    cv2.imshow('frame',frame)
-    cv2.waitKey(1)
     return our_team_point,enemy_team_point,other_point
 
 
@@ -56,4 +53,4 @@ def main(frame):
     opening = cv2.morphologyEx(frame, cv2.MORPH_OPEN, kernel, iterations=1)
     our_team_point, enemy_team_point, other_point = team_division(opening)
 
-    return our_team_point, enemy_team_point, other_point
+    return opening, our_team_point, enemy_team_point, other_point
