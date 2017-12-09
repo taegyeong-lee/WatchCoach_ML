@@ -1,15 +1,36 @@
 import cv2
 import numpy as np
 
-global cams2
+our_point = []
+enemy_point = []
+other_point = []
+
+
+frame_point = []
+
 
 def draw_circle(event,x,y,flags,param):
-    if event == cv2.EVENT_LBUTTONDOWN:
-        cv2.circle(cams2,(x,y),3,(0,0,255),-1)
+
+    if event == cv2.EVENT_LBUTTONDBLCLK:
+
         global mouseX, mouseY
+        mouseX,mouseY = x,y
+        #print(mouseX,mouseY)
+
+        cv2.circle(cams2,(x,y),7,(0,0,255),-1)
+        our_point.append([mouseX, mouseY])
+
+    elif event == cv2.EVENT_RBUTTONDBLCLK:
 
         mouseX,mouseY = x,y
-        print(mouseX,mouseY)
+        #print(mouseX,mouseY)
+
+        cv2.circle(cams2, (x, y), 7, (0, 255, 0), -1)
+        enemy_point.append([mouseX,mouseY])
+
+
+    cv2.imshow('result',cams2)
+    cv2.imwrite(str(frame_count) + '.jpg', cams2)
 
 
 cam1 = cv2.VideoCapture('/Users/itaegyeong/Desktop/video/cam1_left.mov')
@@ -19,7 +40,9 @@ cam4 = cv2.VideoCapture('/Users/itaegyeong/Desktop/video/cam4_right.mov')
 
 background = cv2.imread('/Users/itaegyeong/Desktop/background.png')
 
+
 cv2.namedWindow('image')
+
 cv2.setMouseCallback('image', draw_circle)
 
 # 640 x 360
@@ -37,13 +60,18 @@ while True:
 
     cams = np.concatenate((left_cam,background),axis=1)
     cams2 = np.concatenate((cams, right_cam), axis=1)
-    cv2.circle(cams2, (mouseX, mouseY), 3, (0, 0, 255), -1)
+
+    our_point = []
+    enemy_point = []
+
 
     cv2.imshow('image',cams2)
 
+    frame_point.append([our_point,enemy_point])
+    print(frame_point)
 
     frame_count = frame_count + 1
-    cv2.waitKey(10000)
+    cv2.waitKey(0)
 
 
     print(frame_count)

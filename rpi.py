@@ -2,7 +2,6 @@ import cv2
 
 video = cv2.VideoCapture('/Users/itaegyeong/Desktop/good.mov')
 
-
 def draw_circle(event,x,y,flags,param):
     global mouseX,mouseY
     if event == cv2.EVENT_LBUTTONDBLCLK:

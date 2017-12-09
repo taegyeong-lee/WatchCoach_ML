@@ -7,9 +7,10 @@ import random
 def canvas_show(our_team_point, enemy_team_point, other_point, w, h):
 
     background_img = cv2.imread('background.jpg') # 407x720
-    img = np.zeros((h, w, 3), np.uint8)
-    draw_circle(img, our_team_point, (255, 0, 0))
-    #draw_circle(img, enemy_team_point, (0, 0, 255))
+
+    draw_circle(background_img, our_team_point, (255, 0, 0))
+    draw_circle(background_img, enemy_team_point, (0, 0, 255))
+    draw_circle(background_img, other_point, (0, 255, 0))
 
     cv2.imshow('img', img)
     cv2.waitKey(1)
@@ -20,18 +21,4 @@ def draw_circle(image, point, rgb):
         for i2 in i:
             cv2.circle(image, (tuple)(i2), 3, rgb, -1)
 
-def draw_circle2(image, point, rgb):
-    point2 = []
-    for i in point:
-        cv2.circle(image, (int(i[0]),int(i[1])), 3, rgb, -1)
 
-
-def draw_circle3(point, rgb):
-    img = np.zeros((360, 640, 3), np.uint8)
-
-    point2 = []
-    for i in point:
-        cv2.circle(img, (int(i[0]), int(i[1])), 3, rgb, -1)
-
-    cv2.imshow('img', img)
-    cv2.waitKey(1)

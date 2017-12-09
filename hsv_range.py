@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-video = cv2.VideoCapture('/Users/itaegyeong/Desktop/GOPR0011.MP4')
+video = cv2.VideoCapture('/Users/itaegyeong/Desktop/GOPR0011.mov')
 
 
 def callback(x):
@@ -46,11 +46,11 @@ while(True):
 
     # show thresholded image
     # 이미지 축소
-    shrink = cv2.resize(frame, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
-    shrink2 = cv2.resize(mask, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+    #shrink = cv2.resize(frame, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+    #shrink2 = cv2.resize(mask, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
 
-    cv2.imshow('image', shrink)
-    cv2.imshow('mask',shrink2)
+    cv2.imshow('image', frame)
+    cv2.imshow('mask',mask)
 
     k = cv2.waitKey(0) & 0xFF # large wait time to remove freezing
     if k == 113 or k == 27:

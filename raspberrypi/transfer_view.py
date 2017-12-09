@@ -6,7 +6,7 @@ import numpy as np
 # 변환행렬, 변환된이미지가로, 변환된이미지세로 반환
 def get_trans_matrix(tl, bl, tr, br):
 
-    # 오리지널 이미지
+    # Original Image
     pts1 = np.float32([tl, bl, tr, br])
 
     # 변환된 이미지의 가로세로 길이 계산
@@ -37,26 +37,22 @@ def trans_object_point(original_image, our_team_point, enemy_team_point, other_p
 
     dst = cv2.warpPerspective(original_image, trans_matrix, (trans_image_weight, trans_image_height))
 
-    try:
+    trans_our_team_point = []
+    trans_enemy_team_point = []
+    trans_other_point = []
+
+
+    if our_team_point != []:
         original_1 = np.array([(our_team_point)], dtype=np.float32)
         trans_our_team_point = cv2.perspectiveTransform(original_1, trans_matrix)
-    except:
-        trans_our_team_point = None
 
-    try:
+    if enemy_team_point != []:
         original_2 = np.array([(enemy_team_point)], dtype=np.float32)
         trans_enemy_team_point = cv2.perspectiveTransform(original_2, trans_matrix)
-    except:
-        trans_enemy_team_point = None
 
-    try:
+    if other_point != []:
         original_3 = np.array([(other_point)], dtype=np.float32)
         trans_other_point = cv2.perspectiveTransform(original_3, trans_matrix)
-    except:
-        trans_other_point = None
 
-
-    print(trans_our_team_point)
-    cv2.imshow('dst',dst)
 
     return dst, trans_our_team_point, trans_enemy_team_point, trans_other_point
