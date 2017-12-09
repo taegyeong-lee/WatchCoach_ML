@@ -7,7 +7,6 @@ from raspberrypi import get_object_point as gop # Get object's points
 from raspberrypi import transfer_view as gtv # Transfer object's points
 
 
-
 def team_division(frame):
     our_team_point = []
     enemy_team_point = []
@@ -86,11 +85,9 @@ def test():
                 gtv.trans_object_point(frame, our_team_point, enemy_team_point,other_point, trans_matrix, trans_w, trans_h)
             gtv.trans_object_point(frame, our_team_point, enemy_team_point, other_point, trans_matrix, trans_w, trans_h)
 
-            print(trans_our_team_point)
-
             cv2.imshow('dst',dst)
 
 
-            #result_frame = dp.canvas_show(our_team_point, enemy_team_point, our_team_point)
+            result_frame = dp.canvas_show(our_team_point, enemy_team_point, our_team_point, trans_w, trans_h)
 
 test()

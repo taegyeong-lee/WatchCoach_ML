@@ -54,5 +54,4 @@ def trans_object_point(original_image, our_team_point, enemy_team_point, other_p
         original_3 = np.array([(other_point)], dtype=np.float32)
         trans_other_point = cv2.perspectiveTransform(original_3, trans_matrix)
 
-
     return dst, trans_our_team_point, trans_enemy_team_point, trans_other_point
