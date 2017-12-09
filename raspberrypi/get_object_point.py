@@ -1,10 +1,5 @@
 import cv2
 import numpy as np
-from raspberrypi import get_stadium_point as gsp # Get stadium's points
-from raspberrypi import draw_canvas as dc # Draw camvas top view
-from raspberrypi import get_object_point as gop # Get object's points
-from raspberrypi import transfer_view as gtv # Transfer object's points
-
 
 def team_division(frame):
     our_team_point = []
@@ -57,49 +52,8 @@ def team_division(frame):
 
 
 def main(frame):
-    # Morphology의 opening, closing을 통해서 노이즈제거
     kernel = np.ones((3, 3), np.uint8)
     opening = cv2.morphologyEx(frame, cv2.MORPH_OPEN, kernel, iterations=1)
     our_team_point, enemy_team_point, other_point = team_division(opening)
+
     return our_team_point, enemy_team_point, other_point
-
-
-def test():
-    cap = cv2.VideoCapture('/Users/itaegyeong/Desktop/GOPR0011.mov')
-
-    # Get trans Matrix, trans image weight and height
-    trans_matrix, trans_w, trans_h = gtv.get_trans_matrix([31, 160], [424, 346], [206, 38],
-                                                          [526, 147])
-
-    if cap.isOpened():
-
-        while True:
-            ret, frame = cap.read()
-
-            if ret is True:
-
-                # Morphology의 opening, closing을 통해서 노이즈제거
-                kernel = np.ones((3, 3), np.uint8)
-                opening = cv2.morphologyEx(frame, cv2.MORPH_OPEN, kernel, iterations=1)
-
-                our_team_point, enemy_team_point, other_point = team_division(opening)
-
-                # Get trans object's points
-                dst, trans_our_team_point, trans_enemy_team_point, trans_other_point = \
-                    gtv.trans_object_point(opening, our_team_point, enemy_team_point,other_point, trans_matrix, trans_w, trans_h)
-
-                if trans_our_team_point != []:
-                    dc.draw_circle(dst,trans_our_team_point,(255, 0, 0))
-                if trans_enemy_team_point != []:
-                    dc.draw_circle(dst,trans_enemy_team_point,(0, 0, 255))
-                if trans_other_point != []:
-                    dc.draw_circle(dst,trans_other_point,(0, 255, 0))
-
-                cv2.imshow('dst',dst)
-                cv2.waitKey(0)
-
-                result_frame = dc.canvas_show(trans_our_team_point, trans_enemy_team_point, trans_other_point, trans_w, trans_h)
-
-        cv2.destroyAllWindows()
-
-test()
