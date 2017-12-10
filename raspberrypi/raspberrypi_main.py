@@ -5,26 +5,33 @@ from raspberrypi import draw_canvas as dp # Draw camvas top view
 from raspberrypi import get_object_point as gop # Get object's points
 from raspberrypi import transfer_view as gtv # Transfer object's points
 
+frame_success = False
+
 cap = cv2.VideoCapture('/Users/itaegyeong/Desktop/GOPR0011.mov')
+
+trans_matrix, trans_w, trans_h = None, None, None
 
 if cap.isOpened():
     while True:
         ret, frame = cap.read()
         if ret is True:
+
             # Get stadium frame and stadium's points [ [x1,y1], [x2,y2], [x3,y3], [x4,y4] ]
-            # stadium_point, stadium_frame = gsp.main(frame)
-            stadium_frame = frame
+            if frame_success is False:
+                _, stadium_frame, img, stadium_point = gsp.get_stadium_line(frame)
 
-            # Get trans Matrix, trans image weight and height
-            #trans_matrix, trans_w, trans_h = gtv.get_trans_matrix(stadium_point[0], stadium_point[1], stadium_point[2],
-            #                                                      stadium_point[3])
+                if stadium_frame is None:
+                    continue
+                else:
+                    # Get trans Matrix, trans image weight and height
+                    trans_matrix, trans_w, trans_h = gtv.get_trans_matrix(stadium_point[0], stadium_point[1],
+                                                                          stadium_point[2],
+                                                                          stadium_point[3])
+                    frame_success = True
 
-            # Get trans Matrix, trans image weight and height
-            trans_matrix, trans_w, trans_h = gtv.get_trans_matrix([31, 160], [424, 346], [206, 38],
-                                                                  [526, 147])
 
             # Get object's points
-            find_frame, our_team_point, enemy_team_point, other_point = gop.main(stadium_frame)
+            find_frame, our_team_point, enemy_team_point, other_point = gop.main(frame)
 
             # Get trans object's points
             dst, trans_our_team_point, trans_enemy_team_point, trans_other_point = \
