@@ -4,7 +4,7 @@ import transfer_view as tv
 
 
 
-video = cv2.VideoCapture('/Users/itaegyeong/Desktop/good.mov')
+video = cv2.VideoCapture('0')
 
 fourcc = cv2.VideoWriter_fourcc(*'XVID')
 out = cv2.VideoWriter('basketball_output.mp4',fourcc, 30.0, (640,360))
@@ -25,6 +25,9 @@ other_point = []
 
 while True:
     ret, frame = video.read()
+    moving = knn.apply(frame)
+    cv2.imshow('mvoing',moving)
+
     cv2.imshow('frame',frame)
 
     # Morphology의 opening, closing을 통해서 노이즈제거
