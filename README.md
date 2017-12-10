@@ -19,7 +19,7 @@
 - test : test code about image processing and other source
 - trashes : test code but i can recycle this code
 - object_detection : model for machine learning
-- raspberrypi : test code for raspberrypi testing
+- raspberrypi_process : test code for raspberrypi_process testing
 
 
 

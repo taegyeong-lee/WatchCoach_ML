@@ -21,20 +21,13 @@ def draw_circle(event,x,y,flags,param):
         cv2.circle(cam1_frame,(x,y),7,(0,0,255),-1)
         our_point.append([mouseX, mouseY])
 
-    elif event == cv2.EVENT_RBUTTONDBLCLK:
-
-        mouseX,mouseY = x,y
-        #print(mouseX,mouseY)
-
-        cv2.circle(cam1_frame, (x, y), 7, (0, 255, 0), -1)
-        enemy_point.append([mouseX,mouseY])
 
 
     cv2.imshow('result',cam1_frame)
     cv2.imwrite(str(frame_count) + '.jpg', cam1_frame)
 
 
-cam1 = cv2.VideoCapture('/Users/itaegyeong/Desktop/video/cam1_left.mov')
+cam1 = cv2.VideoCapture('/Users/itaegyeong/Desktop/get_point.mov')
 
 cv2.namedWindow('image')
 
@@ -48,7 +41,7 @@ while True:
     _, cam1_frame = cam1.read()
     frame_count = frame_count + 1
 
-    if frame_count % 5 != 0:
+    if frame_count % 6 != 0:
         continue
 
     our_point = []

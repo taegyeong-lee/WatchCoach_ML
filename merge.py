@@ -38,7 +38,7 @@ cam2 = cv2.VideoCapture('/Users/itaegyeong/Desktop/video/cam2_left.mov')
 cam3 = cv2.VideoCapture('/Users/itaegyeong/Desktop/video/cam3_right.mov')
 cam4 = cv2.VideoCapture('/Users/itaegyeong/Desktop/video/cam4_right.mov')
 
-background = cv2.imread('/Users/itaegyeong/Desktop/background.png')
+background = cv2.imread('/Users/itaegyeong/Desktop/background_big.png')
 
 
 cv2.namedWindow('image')

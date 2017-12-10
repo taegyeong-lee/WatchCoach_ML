@@ -1,9 +1,9 @@
 import cv2
 import numpy as np
-from raspberrypi import get_stadium_point as gsp # Get stadium's points
-from raspberrypi import draw_canvas as dp # Draw camvas top view
-from raspberrypi import get_object_point as gop # Get object's points
-from raspberrypi import transfer_view as gtv # Transfer object's points
+from raspberrypi_process import get_stadium_point as gsp # Get stadium's points
+from raspberrypi_process import draw_canvas as dp # Draw camvas top view
+from raspberrypi_process import get_object_point as gop # Get object's points
+from raspberrypi_process import transfer_view as gtv # Transfer object's points
 
 frame_success = False
 

@@ -67,6 +67,7 @@ while True:
     cv2.imshow('frame',frame)
     out.write(frame)
 
+    print('point;',point)
 
     dst, trans_our_team_point, trans_enemy_team_point, trans_other_point = tv.trans_object_point(frame, point, enemy_team_point, other_point, M, trans_w, trans_h)
 

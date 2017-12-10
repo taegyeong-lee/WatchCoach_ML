@@ -92,9 +92,11 @@ def get_stadium_line(frame):
 
     for x, y in points:
         cv2.circle(img, (x, y), 3, (0, 0, 255), -1)
-    ##        cv2.imshow('a', img)
+
+
 
     if (len(points) == 4):
+
         return frame, rev, img, points
 
     return None, None, None, None
