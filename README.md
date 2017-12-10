@@ -14,18 +14,3 @@
 ![basketball_output](https://user-images.githubusercontent.com/28443896/33801437-992b53aa-dd9e-11e7-99e0-0b6ce07936a4.gif)
 
 
-
-## Derectory Introduction
-- test : test code about image processing and other source
-- trashes : test code but i can recycle this code
-- object_detection : model for machine learning
-- raspberrypi_process : test code for raspberrypi_process testing
-
-
-
-## Lib
-- python 3.6.1
-- tensorflow 1.2.1
-- opencv 3.3.0.10
-
-### 
