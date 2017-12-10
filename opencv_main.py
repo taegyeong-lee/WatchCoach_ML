@@ -5,6 +5,11 @@ import transfer_view as tv
 
 
 video = cv2.VideoCapture('/Users/itaegyeong/Desktop/good.mov')
+
+fourcc = cv2.VideoWriter_fourcc(*'XVID')
+out = cv2.VideoWriter('basketball_output.mp4',fourcc, 30.0, (640,360))
+
+
 knn = cv2.createBackgroundSubtractorKNN()
 
 point = []
@@ -60,6 +65,8 @@ while True:
         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
     cv2.imshow('frame',frame)
+    out.write(frame)
+
 
     dst, trans_our_team_point, trans_enemy_team_point, trans_other_point = tv.trans_object_point(frame, point, enemy_team_point, other_point, M, trans_w, trans_h)
 
@@ -67,7 +74,7 @@ while True:
 
 
     frame_count = frame_count + 1
-    cv2.waitKey(0)
+    cv2.waitKey(1)
 
 
 
