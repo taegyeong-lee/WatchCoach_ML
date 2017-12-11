@@ -9,7 +9,6 @@ video = cv2.VideoCapture('0')
 fourcc = cv2.VideoWriter_fourcc(*'XVID')
 out = cv2.VideoWriter('basketball_output.mp4',fourcc, 30.0, (640,360))
 
-
 knn = cv2.createBackgroundSubtractorKNN()
 
 point = []

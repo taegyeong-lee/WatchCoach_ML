@@ -64,7 +64,6 @@ while True:
     our_point = []
     enemy_point = []
 
-
     cv2.imshow('image',cams2)
 
     frame_point.append([our_point,enemy_point])
@@ -72,6 +71,5 @@ while True:
 
     frame_count = frame_count + 1
     cv2.waitKey(0)
-
 
     print(frame_count)

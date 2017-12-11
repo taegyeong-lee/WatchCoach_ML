@@ -31,9 +31,6 @@ while True:
     opening2 = cv2.morphologyEx(thresh4, cv2.MORPH_OPEN, kernel, iterations=3)
     cv2.imshow('opening2 mask',opening2)
 
-
-
-
     _, contours, _ = cv2.findContours(thresh4, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
     point_list = []
@@ -51,9 +48,7 @@ while True:
 
         cv2.rectangle(copy, (x, y), (x + w, y + h), (0, 0, 255), 2)
 
-
     cv2.imshow('c',copy)
-
     cv2.imshow('moving_mask',moving_mask)
 
     cv2.waitKey(0)
