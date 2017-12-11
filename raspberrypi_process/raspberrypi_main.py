@@ -63,6 +63,7 @@ def test():
             ret, frame = cap.read()
             if ret is True:
 
+
                 # Get trans Matrix, trans image weight and height
                 trans_matrix, trans_w, trans_h = gtv.get_trans_matrix([23,164],[432,358], [205,34]
                                                                       ,[532,142])
@@ -83,7 +84,7 @@ def test():
                     else:
                         our_defence_flag = False
 
-                elif key == ord('f'):
+                if key == ord('f'):
                     if enemy_defence_flag is False:
                         enemy_defence_flag = True
                     else:
