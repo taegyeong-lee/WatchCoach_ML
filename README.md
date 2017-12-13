@@ -1,4 +1,6 @@
-## WatchCoach_ML 
+현재 코드리펙토링 후 정리 중입니다.
+
+## WatchCoach_ML
 
 - Software Maestro 8th Project (republic of korea, Ministry of Science and ICT, 약칭: 과기정통부, MSIT)
 - WatchCoach Machine Learning and Computer Vision

@@ -3,8 +3,8 @@ import cv2
 
 
 def standard_point(point, w, h):
-    weight = 389/w
-    height = 720/h
+    weight = 720/w
+    height = 389/h
 
     for i in point:
         for j in i:
@@ -17,7 +17,7 @@ def standard_point(point, w, h):
 # 1 = our team, -1 = enemy team
 def canvas_show(our_team_point, enemy_team_point, other_point, w, h, defecne_flag):
 
-    background_img = cv2.imread('/Users/itaegyeong/Desktop/background.png') # 407x720
+    background_img = cv2.imread('./background.png') # 407x720
 
     if our_team_point != []:
         our_team_point = standard_point(our_team_point,w,h)

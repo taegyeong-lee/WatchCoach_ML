@@ -43,20 +43,24 @@ def get_stadium_line(frame):
     h, w = img.shape[:2]
     mk = np.zeros((h + 2, w + 2), np.uint8)
 
-    mask = cv2.inRange(img, np.array([170, 170, 170]), np.array([220, 220, 220]))
+    mask = cv2.inRange(img, np.array([140, 140, 140]), np.array([220, 220, 220]))
     # cv2.imshow('mask', mask)
     mop = cv2.dilate(mask, kernel, iterations=3)
     mop = cv2.erode(mop, kernel, iterations=1)
-    # cv2.imshow('mop', mop)
+    cv2.imshow('mop', mop)
     rev = cv2.bitwise_not(mop)
     cv2.floodFill(rev, mk, (0, 0), (0, 0, 0), 30, 30, 4)
-    # cv2.imshow('rev',rev)
+    cv2.floodFill(rev, mk, (0, h-1), (0, 0, 0), 30, 30, 4)
+    cv2.floodFill(rev, mk, (w-1, 0), (0, 0, 0), 30, 30, 4)
+    cv2.floodFill(rev, mk, (w-1, h-1), (0, 0, 0), 30, 30, 4)
+    #cv2.imshow('rev',rev)
+    cv2.waitKey(1)
     edges = cv2.Canny(rev, 50, 150, apertureSize=3)
     # cv2.imshow("edges", edges)
 
     lines = cv2.HoughLines(edges, 1, np.pi / 180, 65)
     if lines is not None:
-        if len(lines) > 3 and len(lines) < 15:
+        if len(lines) > 3 and len(lines) < 20:
             points = get_stadium_points(lines, h, w)
             print(points)
             for l in lines:
