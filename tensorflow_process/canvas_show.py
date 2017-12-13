@@ -35,3 +35,5 @@ def draw_circle3(point, rgb):
 
     cv2.imshow('img', img)
     cv2.waitKey(1)
+
+    print("test")
