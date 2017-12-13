@@ -1,4 +1,3 @@
-현재 코드리펙토링 후 정리 중입니다.
 
 ## WatchCoach_ML
 
@@ -19,3 +18,6 @@
 
 ![result](https://user-images.githubusercontent.com/28443896/33825798-24f58ce0-dea6-11e7-9d7e-5732b494c228.gif)
 
+## Lib
+- tensorflow 1.4.0.
+- opencv-python 3.3.0.10
