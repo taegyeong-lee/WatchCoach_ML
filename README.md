@@ -3,6 +3,7 @@
 
 - Software Maestro 8th Project (republic of korea, Ministry of Science and ICT, 약칭: 과기정통부, MSIT)
 - WatchCoach Machine Learning and Computer Vision
+- 2017-12-13 : Code Refactoring and Clear files
 
 ## Image Processing Result
 
